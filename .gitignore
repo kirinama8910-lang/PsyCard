@@ -1,0 +1,16 @@
+# Client data (confidential)
+data/clients/
+data/backups/
+data/inbox_notes/
+data/audio_archive/
+data/logs/
+
+# Environment
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
