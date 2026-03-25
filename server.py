@@ -265,7 +265,11 @@ def find_or_create_card(payload: ClientPayload) -> dict:
         created = True
 
     card_path = find_client_card(client_id, display_name)
-    card      = _docx_to_card(card_path, display_name) if card_path else _build_empty_card(display_name)
+    # Новый клиент → пустая карта: шаблон может содержать чужие данные
+    if created:
+        card = _build_empty_card(display_name)
+    else:
+        card = _docx_to_card(card_path, display_name) if card_path else _build_empty_card(display_name)
 
     _write_action_log(client_key, "find_or_create", payload.taskType, created=created)
 
@@ -427,6 +431,23 @@ def simulate_analysis(payload: ClientPayload) -> dict:
         "text": f"Демо-разбор готов для клиента: {client_key}",
         "structured_json": demo_json,
     }
+
+
+# Удаляет папку клиента вместе с картой (backup сохраняется)
+@app.delete("/api/clients/{client_id}")
+def delete_client(client_id: str) -> dict:
+    import shutil
+    client_dir = CLIENTS_DIR / client_id
+    if not client_dir.exists():
+        raise HTTPException(404, f"Клиент не найден: {client_id}")
+
+    # Делаем backup перед удалением
+    backup_path = create_backup(client_id)
+
+    shutil.rmtree(client_dir)
+    _write_action_log(client_id, "delete", "", backup=str(backup_path) if backup_path else None)
+
+    return {"ok": True, "client_id": client_id, "backup_path": str(backup_path) if backup_path else None}
 
 
 # ── Точка входа ───────────────────────────────────────────────────────────────

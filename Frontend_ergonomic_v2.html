@@ -770,7 +770,7 @@
 
           <div class="status-row">
             <span id="modeStatusPill" class="pill pill-accent">Режим: первичный приём</span>
-            <span id="clientStatusPill" class="pill">Клиент не определён</span>
+            <span id="clientStatusPill" class="pill" style="display:none">Клиент не определён</span>
             <span id="cardStatusPill" class="pill">Карта не загружена</span>
           </div>
         </div>
@@ -1455,9 +1455,13 @@
       }
 
       state.filteredClients.forEach(client => {
+        const wrapper = document.createElement("div");
+        wrapper.style.cssText = "position:relative;display:flex;align-items:stretch;";
+
         const button = document.createElement("button");
         button.type = "button";
         button.className = "client-item" + (client.id === state.activeClientId ? " active" : "");
+        button.style.flex = "1";
         button.innerHTML = `
           <div class="client-name">${escapeHtml(client.displayName)}</div>
           <div class="client-meta">
@@ -1471,7 +1475,35 @@
           state.cardLoaded = true;
           renderAll();
         });
-        clientList.appendChild(button);
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.type = "button";
+        deleteBtn.title = "Удалить клиента";
+        deleteBtn.textContent = "×";
+        deleteBtn.style.cssText = "background:none;border:none;color:#e57373;font-size:18px;padding:0 10px;cursor:pointer;opacity:0.7;flex-shrink:0;";
+        deleteBtn.addEventListener("mouseenter", () => deleteBtn.style.opacity = "1");
+        deleteBtn.addEventListener("mouseleave", () => deleteBtn.style.opacity = "0.7");
+        deleteBtn.addEventListener("click", async (e) => {
+          e.stopPropagation();
+          if (!confirm(`Удалить клиента «${client.displayName}»? Backup будет создан автоматически.`)) return;
+          try {
+            const res = await fetch(`${BASE_URL}/api/clients/${client.id}`, { method: "DELETE" });
+            if (!res.ok) throw new Error(await res.text());
+            state.clients = state.clients.filter(c => c.id !== client.id);
+            if (state.activeClientId === client.id) {
+              state.activeClientId = null;
+              state.cardLoaded = false;
+            }
+            renderAll();
+            showToast(`Клиент «${client.displayName}» удалён`, "success");
+          } catch (err) {
+            showToast("Ошибка удаления: " + err.message, "error");
+          }
+        });
+
+        wrapper.appendChild(button);
+        wrapper.appendChild(deleteBtn);
+        clientList.appendChild(wrapper);
       });
     }
 
@@ -1682,14 +1714,6 @@
 
       modeStatusPill.textContent = `Режим: ${formatTaskType(state.taskType)}`;
       docModePill.textContent = state.taskType;
-
-      if (clientKey) {
-        clientStatusPill.textContent = validClient
-          ? `Клиент: ${clientKey}`
-          : `Клиент: неверный формат`;
-      } else {
-        clientStatusPill.textContent = "Клиент не определён";
-      }
 
       if (client) {
         cardStatusPill.textContent = `Карта: ${client.displayName}`;
