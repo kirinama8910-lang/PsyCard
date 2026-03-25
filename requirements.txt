@@ -1,2 +1,7 @@
 streamlit
 python-docx
+fastapi
+uvicorn
+anthropic
+python-dotenv
+pydantic

@@ -9,6 +9,7 @@ echo.
 
 cd /d "%~dp0"
 
+:: Проверка Python
 python --version >nul 2>&1
 if errorlevel 1 (
     echo [ERROR] Python not found.
@@ -23,7 +24,8 @@ echo [OK] Python found
 python --version
 echo.
 
-python -c "import streamlit" >nul 2>&1
+:: Проверка зависимостей
+python -c "import fastapi" >nul 2>&1
 if errorlevel 1 (
     echo Installing dependencies...
     pip install -r requirements.txt
@@ -35,7 +37,6 @@ if errorlevel 1 (
         pause
         exit /b 1
     )
-    echo.
     echo [OK] Dependencies installed
     echo.
 ) else (
@@ -43,10 +44,25 @@ if errorlevel 1 (
     echo.
 )
 
-echo Starting app at http://127.0.0.1:8501
-echo To stop: close this window or press Ctrl+C
+:: Запускаем FastAPI-сервер в отдельном окне
+echo Starting server at http://127.0.0.1:8000 ...
+start "psy-client-cards SERVER" python server.py
+
+:: Ждём 2 секунды пока сервер поднимется
+timeout /t 2 /nobreak > nul
+
+:: Открываем фронтенд в браузере
+echo Opening Frontend_ergonomic_v2.html in browser...
+start "" "%~dp0Frontend_ergonomic_v2.html"
+
 echo.
-
-python -m streamlit run app.py --server.address 127.0.0.1 --server.port 8501
-
+echo ========================================
+echo   Готово!
+echo   Сервер: http://127.0.0.1:8000
+echo   Документация API: http://127.0.0.1:8000/docs
+echo   Фронтенд открыт в браузере
+echo.
+echo   Чтобы остановить: закройте окно SERVER
+echo ========================================
+echo.
 pause
