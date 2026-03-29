@@ -8,389 +8,281 @@
   <style>
     :root {
       color-scheme: dark;
-
-      /* ── Основной фон — тёплый тёмный, без холодного синего ── */
       --bg: #181c24;
       --bg-2: #1d2230;
       --panel: #1f2636;
       --panel-2: #232d3d;
       --panel-3: #283241;
       --input: #171d2a;
-
-      /* ── Текст: не чисто-белый, снижена яркость до ~85 % ── */
       --text: #d5dfe9;
       --text-soft: #8fa0b3;
       --text-faint: #5e7080;
-
-      /* ── Разделители ── */
-      --line: rgba(255, 255, 255, 0.07);
-      --line-strong: rgba(255, 255, 255, 0.12);
-
-      /* ── Акцент: приглушённый синефиолетовый ── */
+      --line: rgba(255,255,255,0.07);
+      --line-strong: rgba(255,255,255,0.12);
       --accent: #6f80e0;
-      --accent-soft: rgba(111, 128, 224, 0.14);
+      --accent-soft: rgba(111,128,224,0.14);
       --accent-strong: #94a2f2;
-
-      /* ── Статус-цвета: снижена насыщенность ── */
       --success: #6ab88a;
       --warning: #c8a44a;
       --danger: #c07878;
-
-      /* ── Панель карточки — тёплый тёмный «пергамент» ──
-           КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ: вместо #f3efe7 (почти белый)
-           используем тёплый тёмный фон, яркостная разница с
-           центральной зоной — менее 20 % по СанПиН 2.2.2/2.4.1340-03 ── */
       --doc-bg: #21201a;
       --doc-line: #38342c;
       --doc-text: #c8bea8;
       --doc-soft: #8a8070;
       --doc-label: #a09688;
       --doc-head: #ddd0b8;
-
       --radius-xl: 22px;
       --radius-lg: 18px;
       --radius-md: 14px;
       --radius-sm: 10px;
-
       --shadow-lg: 0 18px 40px rgba(0,0,0,0.30);
       --shadow-md: 0 10px 24px rgba(0,0,0,0.24);
-      --shadow-doc: 0 20px 42px rgba(0,0,0,0.30);
-
       --transition: 180ms ease;
-      --sidebar: 300px;
-      --doc: 560px;
+      --sidebar: 280px;
     }
 
     * { box-sizing: border-box; }
 
     html, body {
-      margin: 0;
-      padding: 0;
-      min-height: 100%;
-      font-family: Inter, "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      margin: 0; padding: 0; height: 100%;
+      font-family: Inter, "Segoe UI", system-ui, -apple-system, sans-serif;
       background:
         radial-gradient(circle at top left, rgba(127,140,255,0.08), transparent 28%),
         linear-gradient(180deg, #0c1117 0%, #0f141a 100%);
       color: var(--text);
+      overflow: hidden;
     }
-
-    body { overflow: auto; }
 
     button, input, textarea, select { font: inherit; }
 
+    /* ── Layout ── */
     .app {
-      min-height: 100vh;
       display: grid;
-      grid-template-columns: var(--sidebar) minmax(700px, 1fr) var(--doc);
-      gap: 18px;
-      padding: 18px;
-      align-items: start;
+      grid-template-columns: var(--sidebar) 1fr;
+      height: 100vh;
+      overflow: hidden;
+      padding: 14px;
+      gap: 14px;
     }
 
-    .panel {
+    /* ── Sidebar ── */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 28px);
+      overflow: hidden;
       background: linear-gradient(180deg, rgba(23,31,41,0.97), rgba(19,26,34,0.98));
       border: 1px solid var(--line);
       border-radius: var(--radius-xl);
       box-shadow: var(--shadow-lg);
     }
 
-    .sidebar {
-      position: sticky;
-      top: 18px;
-      max-height: calc(100vh - 36px);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-
     .brand {
-      padding: 20px 20px 16px;
+      padding: 18px 18px 14px;
       border-bottom: 1px solid var(--line);
+      flex-shrink: 0;
     }
 
-    .brand-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+    .brand-row { display: flex; align-items: center; gap: 12px; }
 
     .brand-icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
-      display: grid;
-      place-items: center;
+      width: 40px; height: 40px; border-radius: 12px;
+      display: grid; place-items: center;
       background: linear-gradient(135deg, #7080e0, #5a6cd4);
-      color: white;
-      font-weight: 800;
-      font-size: 18px;
-      box-shadow: 0 10px 18px rgba(111,128,224,0.18);
+      color: white; font-weight: 800; font-size: 17px;
+      box-shadow: 0 8px 16px rgba(111,128,224,0.18);
+      flex-shrink: 0;
     }
 
-    .brand-title {
-      font-size: 20px;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      margin: 0;
-    }
-
-    .brand-subtitle {
-      margin-top: 4px;
-      color: var(--text-soft);
-      font-size: 12px;
-    }
+    .brand-title { font-size: 17px; font-weight: 800; letter-spacing: -0.03em; margin: 0; }
+    .brand-subtitle { margin-top: 2px; color: var(--text-soft); font-size: 11px; }
 
     .sidebar-search {
-      padding: 14px 16px;
+      padding: 10px 12px;
       border-bottom: 1px solid var(--line);
+      flex-shrink: 0;
     }
 
-    .input, .select, .textarea {
-      width: 100%;
-      border: 1px solid var(--line);
-      background: var(--input);
-      color: var(--text);
-      outline: none;
+    .btn-new-client {
+      margin: 10px 12px 6px;
+      width: calc(100% - 24px);
+      min-height: 38px;
+      border: 1px solid rgba(111,128,224,0.30);
+      border-radius: 10px;
+      background: var(--accent-soft);
+      color: var(--accent-strong);
+      font-size: 13px; font-weight: 700;
+      cursor: pointer;
       transition: var(--transition);
+      flex-shrink: 0;
     }
 
-    .input, .select {
-      height: 46px;
-      border-radius: 12px;
-      padding: 0 14px;
-    }
-
-    .textarea {
-      min-height: 400px;
-      border-radius: 16px;
-      padding: 18px;
-      resize: vertical;
-      line-height: 1.72;
-      font-size: 15px;
-      letter-spacing: 0.005em;
-    }
-
-    .input::placeholder, .textarea::placeholder {
-      color: var(--text-faint);
-    }
-
-    .input:focus, .textarea:focus, .select:focus {
-      border-color: rgba(111,128,224,0.40);
-      box-shadow: 0 0 0 4px rgba(111,128,224,0.10);
+    .btn-new-client:hover {
+      background: rgba(111,128,224,0.22);
+      border-color: rgba(111,128,224,0.50);
     }
 
     .client-list {
-      padding: 12px;
-      overflow: auto;
-      min-height: 0;
+      flex: 1 1 0;
+      overflow-y: auto;
+      padding: 6px 10px;
     }
+
+    .client-list::-webkit-scrollbar { width: 4px; }
+    .client-list::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 4px; }
+
+    .client-item-wrap { position: relative; display: flex; align-items: stretch; margin-bottom: 6px; }
 
     .client-item {
-      width: 100%;
+      flex: 1;
       text-align: left;
       border: 1px solid transparent;
-      border-radius: 16px;
+      border-radius: 14px;
       background: rgba(255,255,255,0.02);
       color: var(--text);
-      padding: 14px;
+      padding: 10px 12px;
       cursor: pointer;
       transition: var(--transition);
-      margin-bottom: 10px;
     }
 
-    .client-item:hover {
-      background: rgba(255,255,255,0.04);
-      border-color: var(--line);
-    }
+    .client-item:hover { background: rgba(255,255,255,0.04); border-color: var(--line); }
 
     .client-item.active {
       background: linear-gradient(180deg, rgba(127,140,255,0.16), rgba(127,140,255,0.08));
       border-color: rgba(127,140,255,0.32);
     }
 
-    .client-name {
-      font-size: 15px;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
+    .client-name { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
 
     .client-meta {
-      display: flex;
-      gap: 8px 12px;
-      flex-wrap: wrap;
-      color: var(--text-soft);
-      font-size: 12px;
-      line-height: 1.45;
+      display: flex; gap: 6px; flex-wrap: wrap;
+      color: var(--text-soft); font-size: 11px; line-height: 1.4;
     }
 
-    .main {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      min-width: 0;
+    .client-delete-btn {
+      background: none; border: none; color: #c07878;
+      font-size: 16px; padding: 0 8px; cursor: pointer;
+      opacity: 0.6; flex-shrink: 0; border-radius: 0 14px 14px 0;
+      transition: var(--transition);
+    }
+    .client-delete-btn:hover { opacity: 1; }
+
+    .sidebar-footer {
+      flex-shrink: 0;
+      border-top: 1px solid var(--line);
+      padding: 8px 10px;
     }
 
-    .main-panel {
-      padding: 20px;
+    .settings-btn {
+      width: 100%; min-height: 36px;
+      background: none; border: none;
+      color: var(--text-soft); font-size: 13px;
+      cursor: pointer; border-radius: 10px;
+      display: flex; align-items: center; gap: 8px;
+      padding: 0 10px;
+      transition: var(--transition);
     }
 
-    .toolbar {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      align-items: flex-start;
-      flex-wrap: wrap;
-      margin-bottom: 16px;
-    }
+    .settings-btn:hover { background: rgba(255,255,255,0.04); color: var(--text); }
 
-    .title-block h1 {
-      margin: 0;
-      font-size: 28px;
-      line-height: 1.08;
-      letter-spacing: -0.04em;
-      font-weight: 800;
-    }
-
-    .title-block p {
-      margin: 8px 0 0;
-      color: var(--text-soft);
-      font-size: 13px;
-      line-height: 1.62;
-      max-width: 860px;
-    }
-
-    .status-row {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      min-height: 34px;
-      padding: 0 12px;
-      border-radius: 999px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,0.03);
-      color: var(--text-soft);
-      font-size: 12px;
-      white-space: nowrap;
-    }
-
-    .pill-accent {
-      background: var(--accent-soft);
-      color: #dfe4ff;
-      border-color: rgba(127,140,255,0.26);
-    }
-
-    .pill-success {
-      background: rgba(126,211,159,0.12);
-      color: #dcf7e5;
-      border-color: rgba(126,211,159,0.24);
-    }
-
-    .card {
-      padding: 18px;
+    /* ── Main work area (Page 1) ── */
+    .page-main {
+      height: calc(100vh - 28px);
+      overflow-y: auto;
       border-radius: var(--radius-xl);
-      border: 1px solid var(--line);
-      background: linear-gradient(180deg, rgba(23,31,41,0.96), rgba(18,25,33,0.98));
-      box-shadow: var(--shadow-md);
     }
 
-    .card-header {
-      display: flex;
-      justify-content: space-between;
+    .page-main::-webkit-scrollbar { width: 6px; }
+    .page-main::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 6px; }
+
+    .empty-state {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      height: 100%;
+      color: var(--text-faint); font-size: 18px; font-weight: 600;
+      letter-spacing: -0.01em;
+      gap: 10px;
+    }
+
+    .empty-state-sub { font-size: 13px; font-weight: 400; color: var(--text-faint); }
+
+    .work-area {
+      display: flex; flex-direction: column;
       gap: 16px;
-      align-items: flex-start;
-      flex-wrap: wrap;
-      margin-bottom: 14px;
+      padding: 20px;
+      min-height: 100%;
     }
 
-    .card-title {
-      margin: 0;
-      font-size: 17px;
-      font-weight: 700;
-      letter-spacing: -0.02em;
+    .work-header {
+      display: flex; align-items: center;
+      gap: 12px; flex-wrap: wrap;
     }
 
-    .card-subtitle {
-      margin-top: 6px;
-      color: var(--text-soft);
-      font-size: 12px;
-      line-height: 1.55;
+    .work-client-name {
+      margin: 0; font-size: 22px; font-weight: 800;
+      letter-spacing: -0.03em;
     }
+
+    .work-card-link {
+      margin-left: auto;
+      background: none; border: 1px solid var(--line);
+      border-radius: 10px; color: var(--text-soft);
+      font-size: 12px; font-weight: 600;
+      padding: 0 12px; min-height: 32px;
+      cursor: pointer; transition: var(--transition);
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+
+    .work-card-link:hover { border-color: var(--accent); color: var(--accent-strong); }
 
     .segmented {
-      display: inline-flex;
-      gap: 4px;
-      padding: 4px;
+      display: inline-flex; gap: 4px; padding: 4px;
       background: #191f2c;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      flex-wrap: wrap;
+      border: 1px solid var(--line); border-radius: 14px; flex-wrap: wrap;
     }
 
     .segment-btn {
-      border: 0;
-      background: transparent;
-      color: var(--text-soft);
-      min-height: 38px;
-      padding: 0 14px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 13px;
-      font-weight: 600;
+      border: 0; background: transparent; color: var(--text-soft);
+      min-height: 36px; padding: 0 14px; border-radius: 10px;
+      cursor: pointer; font-size: 13px; font-weight: 600;
       transition: var(--transition);
     }
 
-    .segment-btn:hover {
-      background: rgba(255,255,255,0.04);
-      color: var(--text);
+    .segment-btn:hover { background: rgba(255,255,255,0.04); color: var(--text); }
+    .segment-btn.active { background: rgba(127,140,255,0.18); color: #eef0ff; }
+
+    .input, .select, .textarea {
+      width: 100%; border: 1px solid var(--line);
+      background: var(--input); color: var(--text);
+      outline: none; transition: var(--transition);
     }
 
-    .segment-btn.active {
-      background: rgba(127,140,255,0.18);
-      color: #eef0ff;
+    .input, .select { height: 44px; border-radius: 12px; padding: 0 14px; }
+
+    .textarea {
+      min-height: 340px; border-radius: 16px;
+      padding: 16px; resize: vertical;
+      line-height: 1.72; font-size: 15px; letter-spacing: 0.005em;
     }
 
-    .form-grid {
-      display: grid;
-      grid-template-columns: 220px 240px minmax(220px, 1fr);
-      gap: 12px;
-      margin: 14px 0 16px;
+    .input::placeholder, .textarea::placeholder { color: var(--text-faint); }
+
+    .input:focus, .textarea:focus, .select:focus {
+      border-color: rgba(111,128,224,0.40);
+      box-shadow: 0 0 0 4px rgba(111,128,224,0.10);
     }
 
-    .field-label {
-      display: block;
-      margin-bottom: 8px;
-      color: var(--text-soft);
-      font-size: 12px;
-      letter-spacing: 0.02em;
-    }
-
-    .action-row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      align-items: center;
-      margin-top: 6px;
+    .action-bar {
+      display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
     }
 
     .btn {
-      border: 1px solid transparent;
-      border-radius: 12px;
-      min-height: 44px;
-      padding: 0 16px;
-      cursor: pointer;
-      transition: var(--transition);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      font-size: 14px;
-      font-weight: 700;
+      border: 1px solid transparent; border-radius: 12px;
+      min-height: 42px; padding: 0 16px;
+      cursor: pointer; transition: var(--transition);
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 8px; font-size: 13px; font-weight: 700;
+      white-space: nowrap;
     }
 
     .btn:hover { transform: translateY(-1px); }
@@ -399,414 +291,273 @@
 
     .btn-primary {
       background: linear-gradient(180deg, #8a97ff, #707ff0);
-      color: white;
-      box-shadow: 0 10px 18px rgba(127,140,255,0.2);
+      color: white; box-shadow: 0 8px 16px rgba(127,140,255,0.2);
     }
 
     .btn-secondary {
-      background: #1a222c;
-      color: var(--text);
-      border-color: var(--line);
+      background: #1a222c; color: var(--text); border-color: var(--line);
     }
 
     .btn-success {
-      background: linear-gradient(180deg, #86d7a8, #69be8d);
-      color: #112017;
+      background: linear-gradient(180deg, #86d7a8, #69be8d); color: #112017;
     }
 
     .btn-warning {
-      background: linear-gradient(180deg, #edce88, #dbb767);
-      color: #30240c;
+      background: linear-gradient(180deg, #edce88, #dbb767); color: #30240c;
     }
 
-    .help {
-      margin-top: 12px;
-      color: var(--text-soft);
-      font-size: 12px;
-      line-height: 1.65;
-    }
+    .btn-sm { min-height: 32px; padding: 0 12px; font-size: 12px; border-radius: 8px; }
 
-    .preview {
-      padding: 14px 16px;
-      border-radius: 16px;
+    .parse-status {
+      padding: 10px 14px; border-radius: 12px;
       border: 1px solid var(--line);
       background: rgba(255,255,255,0.025);
-    }
-
-    .preview-header {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      align-items: center;
-      margin-bottom: 8px;
-      flex-wrap: wrap;
-    }
-
-    .preview-title {
-      margin: 0;
-      font-size: 14px;
-      font-weight: 700;
-    }
-
-    .preview-text {
-      font-size: 13px;
-      color: var(--text-soft);
-      line-height: 1.65;
-      white-space: pre-wrap;
-    }
-
-    .doc-shell {
-      position: sticky;
-      top: 18px;
-      min-height: calc(100vh - 36px);
-      padding: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      background: linear-gradient(180deg, rgba(23,31,41,0.97), rgba(18,25,34,0.98));
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      box-shadow: var(--shadow-lg);
-    }
-
-    .doc-top {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      align-items: flex-start;
-      padding: 4px 2px 0;
-      flex-wrap: wrap;
-    }
-
-    .doc-top-title {
-      margin: 0;
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text);
-    }
-
-    .doc-top-subtitle {
-      margin-top: 4px;
-      color: var(--text-soft);
-      font-size: 12px;
-    }
-
-    .doc-sheet {
-      flex: 1 1 auto;
-      min-height: 0;
-      overflow: auto;
-      background: var(--doc-bg);
-      color: var(--doc-text);
-      border: 1px solid var(--doc-line);
-      border-radius: 18px;
-      box-shadow: var(--shadow-doc);
-      padding: 30px 32px 40px;
-    }
-
-    .doc-header {
-      border-bottom: 1px solid var(--doc-line);
-      padding-bottom: 16px;
-      margin-bottom: 20px;
-    }
-
-    .doc-kicker {
-      color: var(--doc-label);
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.10em;
-      margin-bottom: 10px;
-    }
-
-    .doc-name {
-      margin: 0;
-      font-size: 28px;
-      line-height: 1.08;
-      letter-spacing: -0.04em;
-      font-weight: 800;
-      color: var(--doc-head);
-    }
-
-    .doc-meta {
-      margin-top: 10px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px 16px;
-      color: var(--doc-label);
-      font-size: 13px;
-    }
-
-    .doc-section {
-      margin-top: 22px;
-    }
-
-    .doc-section-title {
-      margin: 0 0 10px;
-      padding-left: 10px;
-      border-left: 3px solid var(--accent);
-      font-size: 16px;
-      line-height: 1.25;
-      font-weight: 800;
-      color: var(--doc-head);
-      letter-spacing: -0.02em;
-    }
-
-    .doc-subsection {
-      margin-top: 16px;
-    }
-
-    .doc-subtitle {
-      margin: 0 0 8px;
-      font-size: 13px;
-      font-weight: 800;
-      color: var(--doc-head);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .doc-fields {
-      display: grid;
-      gap: 10px;
-    }
-
-    .doc-field {
-      display: block;
-    }
-
-    .doc-label {
-      display: block;
-      margin-bottom: 6px;
-      color: var(--doc-label);
-      font-size: 13px;
-      font-weight: 700;
-      line-height: 1.35;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .doc-value {
-      font-size: 15px;
-      line-height: 1.72;
-      color: var(--doc-text);
-      white-space: pre-wrap;
-    }
-
-    .doc-empty {
-      color: var(--doc-soft);
-      font-style: italic;
-    }
-
-    .doc-divider {
-      height: 1px;
-      background: var(--doc-line);
-      margin-top: 20px;
-    }
-
-    .doc-table-wrap {
-      margin-top: 10px;
-      border: 1px solid var(--doc-line);
-      border-radius: 12px;
-      overflow: hidden;
-      background: rgba(255,255,255,0.03);
-    }
-
-    .doc-table {
-      width: 100%;
-      border-collapse: collapse;
-      table-layout: fixed;
-    }
-
-    .doc-table th, .doc-table td {
-      border-bottom: 1px solid var(--doc-line);
-      border-right: 1px solid var(--doc-line);
-      padding: 10px 10px;
-      vertical-align: top;
-      text-align: left;
-      font-size: 14px;
-      line-height: 1.55;
-      word-break: break-word;
-    }
-
-    .doc-table tr:last-child td { border-bottom: 0; }
-    .doc-table th:last-child, .doc-table td:last-child { border-right: 0; }
-
-    .doc-table th {
-      background: rgba(0,0,0,0.20);
-      color: var(--doc-soft);
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      font-weight: 800;
-    }
-
-    .doc-mini {
-      font-size: 11px;
-      color: var(--text-soft);
+      font-size: 12px; color: var(--text-soft);
       line-height: 1.6;
-      padding: 0 2px;
     }
 
-    .toast {
-      position: fixed;
-      right: 18px;
-      bottom: 18px;
-      z-index: 100;
-      min-width: 280px;
-      max-width: 420px;
-      background: rgba(24,30,40,0.98);
-      color: var(--text);
-      border: 1px solid var(--line-strong);
-      box-shadow: var(--shadow-lg);
-      border-radius: 14px;
-      padding: 14px 16px;
+    .parse-status-time { color: var(--text-faint); margin-right: 8px; }
+    .parse-status-ok { color: var(--success); }
+    .parse-status-warn { color: var(--warning); }
+
+    /* ── Page 2: Client Card ── */
+    .page-card {
+      position: fixed; inset: 0; z-index: 100;
       display: none;
+      flex-direction: column;
+      background: var(--bg);
+      overflow: hidden;
+    }
+
+    .page-card.visible { display: flex; }
+
+    .card-page-header {
+      display: flex; align-items: center; gap: 16px;
+      padding: 14px 24px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(23,31,41,0.97), rgba(19,26,34,0.98));
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+
+    .card-page-title-block { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
+
+    .card-page-h1 {
+      margin: 0; font-size: 20px; font-weight: 800;
+      letter-spacing: -0.03em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    .card-tab-bar {
+      display: flex; gap: 4px; padding: 10px 24px 0;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(23,31,41,0.97), rgba(19,26,34,0.98));
+      flex-shrink: 0;
+    }
+
+    .card-tab-btn {
+      border: 0; background: transparent;
+      color: var(--text-soft); padding: 8px 16px 10px;
+      font-size: 13px; font-weight: 600; cursor: pointer;
+      border-bottom: 2px solid transparent; margin-bottom: -1px;
+      transition: var(--transition);
+    }
+
+    .card-tab-btn:hover { color: var(--text); }
+    .card-tab-btn.active { color: var(--accent-strong); border-bottom-color: var(--accent); }
+
+    .card-content {
+      flex: 1; overflow-y: auto; padding: 24px;
+    }
+
+    .card-content::-webkit-scrollbar { width: 6px; }
+    .card-content::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 6px; }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .form-section { margin-bottom: 28px; }
+
+    .form-section-title {
+      font-size: 12px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--text-soft); margin-bottom: 14px;
+      padding-bottom: 8px; border-bottom: 1px solid var(--line);
+    }
+
+    .form-grid-2 {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;
+    }
+
+    .form-field { margin-bottom: 12px; }
+
+    .field-label {
+      display: block; margin-bottom: 6px;
+      color: var(--text-soft); font-size: 12px; font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .radio-group { display: flex; gap: 20px; align-items: center; margin-top: 4px; }
+
+    .radio-group label {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 14px; cursor: pointer; color: var(--text);
+    }
+
+    .radio-group input[type="radio"] { accent-color: var(--accent); cursor: pointer; }
+
+    .card-footer {
+      flex-shrink: 0; padding: 12px 24px;
+      border-top: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(23,31,41,0.97), rgba(19,26,34,0.98));
+      display: flex; align-items: center; gap: 12px;
+    }
+
+    /* ── Implementation table ── */
+    .impl-table-wrap {
+      border: 1px solid var(--line); border-radius: 12px; overflow: hidden; margin-bottom: 10px;
+    }
+
+    .impl-table {
+      width: 100%; border-collapse: collapse; table-layout: auto;
+    }
+
+    .impl-table th {
+      background: rgba(0,0,0,0.20); color: var(--text-soft);
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;
+      font-weight: 800; padding: 8px 10px; text-align: left;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .impl-table td {
+      border-bottom: 1px solid var(--line); padding: 0; vertical-align: middle;
+    }
+
+    .impl-table tr:last-child td { border-bottom: 0; }
+
+    .impl-table th:not(:last-child), .impl-table td:not(:last-child) {
+      border-right: 1px solid var(--line);
+    }
+
+    .impl-input {
+      width: 100%; border: none; background: transparent;
+      color: var(--text); padding: 8px 10px; font-size: 13px;
+      outline: none; transition: background var(--transition);
+    }
+
+    .impl-input:focus { background: rgba(111,128,224,0.08); }
+
+    /* ── Settings modal ── */
+    .settings-modal {
+      position: fixed; inset: 0; z-index: 200;
+      display: none; align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.60);
+    }
+
+    .settings-modal.visible { display: flex; }
+
+    .settings-box {
+      background: linear-gradient(180deg, rgba(27,35,48,0.99), rgba(22,30,42,0.99));
+      border: 1px solid var(--line-strong); border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg); padding: 28px;
+      width: 420px; max-width: calc(100vw - 32px);
+    }
+
+    .settings-box h2 { margin: 0 0 6px; font-size: 18px; font-weight: 800; letter-spacing: -0.02em; }
+    .settings-box p { margin: 0 0 20px; color: var(--text-soft); font-size: 13px; line-height: 1.6; }
+
+    /* ── Pill ── */
+    .pill {
+      display: inline-flex; align-items: center;
+      min-height: 28px; padding: 0 10px; border-radius: 999px;
+      border: 1px solid var(--line); background: rgba(255,255,255,0.03);
+      color: var(--text-soft); font-size: 11px; white-space: nowrap;
+    }
+
+    .pill-accent {
+      background: var(--accent-soft); color: #dfe4ff;
+      border-color: rgba(127,140,255,0.26);
+    }
+
+    .pill-success {
+      background: rgba(126,211,159,0.12); color: #dcf7e5;
+      border-color: rgba(126,211,159,0.24);
+    }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed; right: 18px; bottom: 18px; z-index: 300;
+      min-width: 260px; max-width: 400px;
+      background: rgba(24,30,40,0.98); color: var(--text);
+      border: 1px solid var(--line-strong); box-shadow: var(--shadow-lg);
+      border-radius: 14px; padding: 14px 16px; display: none;
     }
 
     .toast.show { display: block; }
+    .toast-title { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+    .toast-text { font-size: 12px; line-height: 1.6; color: var(--text-soft); white-space: pre-wrap; }
 
-    .toast-title {
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 4px;
+    /* ── Theme toggle ── */
+    .theme-toggle {
+      position: fixed; top: 14px; right: 14px; z-index: 200;
+      width: 38px; height: 38px; border-radius: 50%;
+      border: 1px solid var(--line-strong); background: var(--panel);
+      color: var(--text); cursor: pointer;
+      display: grid; place-items: center; font-size: 17px;
+      box-shadow: var(--shadow-md); transition: var(--transition);
     }
 
-    .toast-text {
-      font-size: 12px;
-      line-height: 1.6;
-      color: var(--text-soft);
-      white-space: pre-wrap;
+    .theme-toggle:hover { transform: scale(1.08); }
+
+    /* ── Scrollbar ── */
+    .card-content::-webkit-scrollbar { width: 5px; }
+    .card-content::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 5px; }
+
+    /* ── Media ── */
+    @media (max-width: 900px) {
+      .app { grid-template-columns: 240px 1fr; padding: 10px; gap: 10px; }
+      :root { --sidebar: 240px; }
     }
 
-    @media (max-width: 1560px) {
-      .app {
-        grid-template-columns: 280px minmax(640px, 1fr) 520px;
-      }
-
-      .form-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .form-grid > div:last-child {
-        grid-column: 1 / -1;
-      }
+    @media (max-width: 640px) {
+      .app { grid-template-columns: 1fr; }
+      .sidebar { height: auto; max-height: 38vh; }
+      .page-main { height: auto; }
     }
 
-    @media (max-width: 1240px) {
-      .app {
-        grid-template-columns: 1fr;
-      }
-
-      .sidebar,
-      .doc-shell {
-        position: static;
-        max-height: none;
-        min-height: auto;
-      }
-
-      .doc-sheet { max-height: none; }
-    }
-
-    @media (max-width: 760px) {
-      .app {
-        padding: 12px;
-        gap: 12px;
-      }
-
-      .main-panel, .card, .doc-shell {
-        padding: 16px;
-      }
-
-      .form-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .title-block h1 {
-        font-size: 24px;
-      }
-
-      .doc-sheet {
-        padding: 22px 20px 28px;
-      }
-    }
-
-    /* ── Светлая тема ── */
+    /* ══════════════════════════════════
+       СВЕТЛАЯ ТЕМА — body:not(.dark)
+       ══════════════════════════════════ */
     body:not(.dark) {
       color-scheme: light;
-
-      --bg: #f8f7ff;
-      --bg-2: #f0eeff;
-      --panel: #ffffff;
-      --panel-2: #f5f3ff;
-      --panel-3: #ede9ff;
+      --bg: #f8f7ff; --bg-2: #f0eeff;
+      --panel: #ffffff; --panel-2: #f5f3ff; --panel-3: #ede9ff;
       --input: #ffffff;
-
-      --text: #1a1a2e;
-      --text-soft: #6b7280;
-      --text-faint: #9ca3af;
-
-      --line: rgba(0, 0, 0, 0.08);
-      --line-strong: rgba(0, 0, 0, 0.14);
-
-      --accent: #7c3aed;
-      --accent-soft: rgba(124, 58, 237, 0.10);
+      --text: #1a1a2e; --text-soft: #6b7280; --text-faint: #9ca3af;
+      --line: rgba(0,0,0,0.08); --line-strong: rgba(0,0,0,0.14);
+      --accent: #7c3aed; --accent-soft: rgba(124,58,237,0.10);
       --accent-strong: #9333ea;
-
-      --success: #16a34a;
-      --warning: #d97706;
-      --danger: #dc2626;
-
-      --doc-bg: #ffffff;
-      --doc-line: #e5e7eb;
-      --doc-text: #1a1a2e;
-      --doc-soft: #6b7280;
-      --doc-label: #9ca3af;
-      --doc-head: #111827;
-
+      --success: #16a34a; --warning: #d97706; --danger: #dc2626;
       --shadow-lg: 0 18px 40px rgba(0,0,0,0.10);
       --shadow-md: 0 10px 24px rgba(0,0,0,0.08);
-      --shadow-doc: 0 20px 42px rgba(0,0,0,0.10);
     }
 
     body:not(.dark) {
       background:
         radial-gradient(circle at top left, rgba(124,58,237,0.06), transparent 28%),
         linear-gradient(180deg, #f8f7ff 0%, #f0eeff 100%);
-      color: var(--text);
     }
 
-    body:not(.dark) .panel {
+    body:not(.dark) .sidebar {
       background: var(--panel);
       border-color: var(--line);
     }
 
-    body:not(.dark) .card {
-      background: #fafafa;
-      border-color: var(--line);
-    }
-
-    body:not(.dark) .input,
-    body:not(.dark) .select,
-    body:not(.dark) .textarea {
-      background: var(--input);
-      color: var(--text);
-      border-color: rgba(0,0,0,0.14);
-    }
-
-    body:not(.dark) .input:focus,
-    body:not(.dark) .textarea:focus,
-    body:not(.dark) .select:focus {
-      border-color: rgba(124,58,237,0.40);
-      box-shadow: 0 0 0 4px rgba(124,58,237,0.10);
-    }
-
     body:not(.dark) .client-item {
-      background: rgba(0,0,0,0.01);
-      color: var(--text);
+      background: rgba(0,0,0,0.01); color: var(--text);
     }
 
     body:not(.dark) .client-item:hover {
-      background: rgba(124,58,237,0.05);
-      border-color: rgba(124,58,237,0.16);
+      background: rgba(124,58,237,0.05); border-color: rgba(124,58,237,0.16);
     }
 
     body:not(.dark) .client-item.active {
@@ -814,290 +565,199 @@
       border-color: rgba(124,58,237,0.28);
     }
 
-    body:not(.dark) .segmented {
-      background: #ede9ff;
-      border-color: rgba(124,58,237,0.15);
+    body:not(.dark) .segmented { background: #ede9ff; border-color: rgba(124,58,237,0.15); }
+    body:not(.dark) .segment-btn { color: var(--text-soft); }
+    body:not(.dark) .segment-btn:hover { background: rgba(124,58,237,0.08); color: var(--text); }
+    body:not(.dark) .segment-btn.active { background: rgba(124,58,237,0.16); color: #5b21b6; }
+
+    body:not(.dark) .input,
+    body:not(.dark) .select,
+    body:not(.dark) .textarea {
+      background: var(--input); color: var(--text); border-color: rgba(0,0,0,0.14);
     }
 
-    body:not(.dark) .segment-btn {
-      color: var(--text-soft);
-    }
-
-    body:not(.dark) .segment-btn:hover {
-      background: rgba(124,58,237,0.08);
-      color: var(--text);
-    }
-
-    body:not(.dark) .segment-btn.active {
-      background: rgba(124,58,237,0.16);
-      color: #5b21b6;
-    }
-
-    body:not(.dark) .pill {
-      background: rgba(0,0,0,0.03);
-      border-color: var(--line);
-      color: var(--text-soft);
-    }
-
-    body:not(.dark) .pill-accent {
-      background: rgba(124,58,237,0.10);
-      color: #6d28d9;
-      border-color: rgba(124,58,237,0.22);
-    }
-
-    body:not(.dark) .pill-success {
-      background: rgba(22,163,74,0.10);
-      color: #15803d;
-      border-color: rgba(22,163,74,0.22);
+    body:not(.dark) .input:focus,
+    body:not(.dark) .textarea:focus,
+    body:not(.dark) .select:focus {
+      border-color: rgba(124,58,237,0.40); box-shadow: 0 0 0 4px rgba(124,58,237,0.10);
     }
 
     body:not(.dark) .btn-primary {
       background: linear-gradient(180deg, #9333ea, #7c3aed);
-      box-shadow: 0 10px 18px rgba(124,58,237,0.22);
+      box-shadow: 0 8px 16px rgba(124,58,237,0.22);
     }
 
     body:not(.dark) .btn-secondary {
-      background: #ffffff;
-      color: var(--text);
-      border-color: rgba(0,0,0,0.14);
+      background: #ffffff; color: var(--text); border-color: rgba(0,0,0,0.14);
     }
 
-    body:not(.dark) .preview {
-      background: rgba(124,58,237,0.03);
-      border-color: rgba(124,58,237,0.12);
-    }
-
-    body:not(.dark) .doc-shell {
-      background: #ffffff;
+    body:not(.dark) .card-page-header,
+    body:not(.dark) .card-tab-bar,
+    body:not(.dark) .card-footer {
+      background: var(--panel);
       border-color: var(--line);
     }
 
-    body:not(.dark) .doc-table th {
-      background: #f3f4f6;
-    }
+    body:not(.dark) .page-card { background: #f4f3ff; }
 
-    body:not(.dark) .doc-table-wrap {
-      background: #fafafa;
-    }
+    body:not(.dark) .card-tab-btn.active { color: #6d28d9; border-bottom-color: #7c3aed; }
+
+    body:not(.dark) .impl-input { color: var(--text); }
+    body:not(.dark) .impl-input:focus { background: rgba(124,58,237,0.06); }
+
+    body:not(.dark) .impl-table th { background: #f3f4f6; }
+    body:not(.dark) .impl-table-wrap { background: #fff; }
 
     body:not(.dark) .toast {
-      background: rgba(255,255,255,0.98);
-      color: var(--text);
-      border-color: var(--line-strong);
+      background: rgba(255,255,255,0.98); color: var(--text); border-color: var(--line-strong);
     }
 
-    /* ── Кнопка переключения темы ── */
-    .theme-toggle {
-      position: fixed;
-      top: 16px;
-      right: 16px;
-      z-index: 200;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      border: 1px solid var(--line-strong);
-      background: var(--panel);
-      color: var(--text);
-      cursor: pointer;
-      display: grid;
-      place-items: center;
-      font-size: 18px;
-      box-shadow: var(--shadow-md);
-      transition: var(--transition);
+    body:not(.dark) .settings-box {
+      background: var(--panel); border-color: var(--line);
     }
 
-    .theme-toggle:hover {
-      transform: scale(1.08);
+    body:not(.dark) .btn-new-client {
+      background: rgba(124,58,237,0.10); color: #7c3aed;
+      border-color: rgba(124,58,237,0.25);
+    }
+
+    body:not(.dark) .btn-new-client:hover {
+      background: rgba(124,58,237,0.18); border-color: rgba(124,58,237,0.45);
+    }
+
+    body:not(.dark) .parse-status {
+      background: rgba(124,58,237,0.04); border-color: rgba(124,58,237,0.12);
     }
   </style>
 </head>
 <body>
-  <div class="app">
-    <aside class="panel sidebar" aria-label="Список клиентов">
+
+  <!-- ══ PAGE 1: two-column app ══ -->
+  <div class="app" id="appPage">
+
+    <aside class="sidebar" aria-label="Список клиентов">
       <div class="brand">
         <div class="brand-row">
           <div class="brand-icon">Ψ</div>
           <div>
             <div class="brand-title">ПсиКарты</div>
-            <div class="brand-subtitle">Карта клиента в структуре реального шаблона</div>
+            <div class="brand-subtitle">Карта клиента психолога</div>
           </div>
         </div>
       </div>
 
       <div class="sidebar-search">
-        <input
-          id="searchClientInput"
-          class="input"
-          type="text"
-          placeholder="Поиск: Анна 2332 / 2332 / Наталья"
-          autocomplete="off"
-        />
+        <input id="searchClientInput" class="input" type="text"
+          placeholder="Поиск по имени или коду…" autocomplete="off" style="height:38px;" />
       </div>
+
+      <button id="newClientBtn" class="btn-new-client">+ Новый клиент</button>
 
       <div id="clientList" class="client-list"></div>
+
+      <div class="sidebar-footer">
+        <button id="settingsBtn" class="settings-btn">⚙ Настройки</button>
+      </div>
     </aside>
 
-    <main class="main">
-      <section class="panel main-panel">
-        <div class="toolbar">
-          <div class="title-block">
-            <h1>Заметка психолога</h1>
-            <p>
-              Центральная рабочая область для вставки заметок, выбора типа задачи и запуска пайплайна:
-              валидация клиента → поиск/создание карты → LLM → preview → backup → сохранение.
-              Правая панель показывает карту в структуре реального документа.
-            </p>
-          </div>
+    <main class="page-main" id="pageMain">
+      <div id="emptyState" class="empty-state">
+        <span>← Выберите клиента</span>
+        <span class="empty-state-sub">Выберите из списка слева или создайте нового</span>
+      </div>
 
-          <div class="status-row">
-            <span id="modeStatusPill" class="pill pill-accent">Режим: первичный приём</span>
-            <span id="clientStatusPill" class="pill" style="display:none">Клиент не определён</span>
-            <span id="cardStatusPill" class="pill">Карта не загружена</span>
-          </div>
+      <div id="workArea" class="work-area" style="display:none">
+        <div class="work-header">
+          <h2 class="work-client-name" id="workClientName">—</h2>
+          <span id="workStatusBadge" class="pill pill-accent"></span>
+          <button id="openCardBtn" class="work-card-link">Карта клиента →</button>
         </div>
 
-        <div class="card">
-          <div class="card-header">
-            <div>
-              <h2 class="card-title">Рабочая заметка</h2>
-              <div class="card-subtitle">
-                Первая строка должна быть в формате <strong>Имя 1234</strong>.
-                Это ключ клиента для поиска или создания карты.
-              </div>
-            </div>
-
-            <div class="segmented" role="tablist" aria-label="Тип задачи">
-              <button class="segment-btn active" data-mode="intake_create_or_update" type="button">Первичный приём</button>
-              <button class="segment-btn" data-mode="session_update" type="button">После встречи</button>
-              <button class="segment-btn" data-mode="client_plan_update" type="button">План клиента</button>
-            </div>
-          </div>
-
-          <textarea
-            id="noteInput"
-            class="textarea"
-            spellcheck="false"
-            placeholder="Анна 2332
-• Пол и возраст: женщина, 36 лет
-• Жалобы: Амбивалентные чувства, не понимаю себя, нет любви к близким, теряю себя, когда сыпется критика
-• Запрос (словами клиента): Разобраться в себе
-• Мишени терапии: Формирование устойчивого образа Я, снижение зависимости от внешней оценки
-• Дополнения из жизни: незавершённый развод
-• Частота, продолжительность: 1 занятие (50 мин) в неделю
-• Стоимость: 7000
-• Правила: Ознакомлена"
-          ></textarea>
-
-          <div class="form-grid">
-            <div>
-              <label class="field-label" for="manualClientInput">Клиент вручную</label>
-              <input
-                id="manualClientInput"
-                class="input"
-                type="text"
-                placeholder="Необязательно — можно оставить пустым"
-                autocomplete="off"
-              />
-            </div>
-
-            <div>
-              <label class="field-label" for="taskTypeSelect">Тип задачи</label>
-              <select id="taskTypeSelect" class="select">
-                <option value="intake_create_or_update">Первичное заполнение / обновление карты</option>
-                <option value="session_update">Заметка после встречи</option>
-                <option value="client_plan_update">Методическое обновление плана</option>
-              </select>
-            </div>
-
-            <div>
-              <label class="field-label" for="firstLinePreview">Первая строка заметки</label>
-              <input id="firstLinePreview" class="input" type="text" readonly />
-            </div>
-          </div>
-
-          <div class="action-row">
-            <button id="primaryIntakeButton" class="btn btn-secondary" type="button">Первичный приём</button>
-            <button id="findOrCreateButton" class="btn btn-primary" type="button">Найти / создать карту</button>
-            <button id="sendToLlmButton" class="btn btn-secondary" type="button">Отправить текст в LLM</button>
-            <button id="previewButton" class="btn btn-secondary" type="button">Просмотр</button>
-            <button id="saveButton" class="btn btn-success" type="button">Сохранить изменения</button>
-            <button id="clearButton" class="btn btn-secondary" type="button">Очистить</button>
-          </div>
-
-          <div class="help">
-            В коде уже оставлены точки подключения к backend:
-            <code>findOrCreateClientCard</code>, <code>sendTextToLLM</code>, <code>getPreview</code>,
-            <code>createBackup</code>, <code>saveChanges</code>, <code>downloadDocument</code>, <code>simulateAnalysis</code>.
-          </div>
+        <div class="segmented" role="tablist">
+          <button class="segment-btn active" data-mode="intake_create_or_update" type="button">Первичный приём</button>
+          <button class="segment-btn" data-mode="session_update" type="button">После встречи</button>
+          <button class="segment-btn" data-mode="client_plan_update" type="button">План клиента</button>
         </div>
 
-        <div class="preview">
-          <div class="preview-header">
-            <h3 class="preview-title">Краткий просмотр изменений</h3>
-            <span id="previewBadge" class="pill">Нет изменений</span>
-          </div>
-          <div id="previewText" class="preview-text">
-            Здесь появится краткий preview того, какие секции и поля будут изменены.
-          </div>
+        <textarea id="noteInput" class="textarea" spellcheck="false"
+          placeholder="Анна 2332&#10;• Жалобы: …&#10;• Запрос (словами клиента): …&#10;• Мишени терапии: …&#10;• Частота, продолжительность: 1 занятие (50 мин) в неделю&#10;• Стоимость: 7000&#10;• Правила: Ознакомлена"></textarea>
+
+        <div class="action-bar">
+          <button id="voiceBtn" class="btn btn-secondary">🎤 Голос</button>
+          <button id="parseNoteBtn" class="btn btn-primary">Разобрать заметку → поля карты</button>
+          <button id="buildPlanBtn" class="btn btn-secondary">Составить план терапии</button>
+          <button id="saveNoteBtn" class="btn btn-success">Сохранить</button>
+          <button id="clearNoteBtn" class="btn btn-secondary">Очистить</button>
+          <button id="downloadBtn" class="btn btn-secondary">Скачать</button>
+          <button id="backupBtn" class="btn btn-warning">Резервная копия</button>
         </div>
 
-        <div class="card">
-          <div class="card-header">
-            <div>
-              <h2 class="card-title">Операции</h2>
-              <div class="card-subtitle">
-                Эти действия оставлены для реальной интеграции с файловой логикой проекта.
-              </div>
-            </div>
-          </div>
-
-          <div class="action-row">
-            <button id="downloadButton" class="btn btn-secondary" type="button">Скачать документ</button>
-            <button id="backupButton" class="btn btn-warning" type="button">Создать резервную копию</button>
-            <button id="simulateButton" class="btn btn-secondary" type="button">Смоделировать разбор</button>
-          </div>
-
-          <div class="help">
-            Для backend здесь ожидаются безопасные операции: создание новой карты из шаблона, резервное копирование,
-            preview diff, запись только нужных секций и safe write через временный файл.
-          </div>
-        </div>
-      </section>
+        <div id="parseStatus" class="parse-status" style="display:none"></div>
+      </div>
     </main>
-
-    <aside class="doc-shell" aria-label="Карта клиента как документ">
-      <div class="doc-top">
-        <div>
-          <div class="doc-top-title">Карта клиента</div>
-          <div class="doc-top-subtitle">Экранная версия реального шаблона .docx</div>
-        </div>
-        <span id="docModePill" class="pill pill-accent">intake_create_or_update</span>
-      </div>
-
-      <div id="docSheet" class="doc-sheet"></div>
-
-      <div class="doc-mini">
-        Правая панель намеренно выглядит как единый документ, а не как набор карточек.
-        Это ближе к реальной карте и удобнее для длительной работы глазами.
-      </div>
-    </aside>
   </div>
 
-  <button id="themeToggle" class="theme-toggle" type="button" title="Переключить тему" aria-label="Переключить тему"></button>
+  <!-- ══ PAGE 2: client card full-screen ══ -->
+  <div id="pageCard" class="page-card" role="main" aria-label="Карта клиента">
+
+    <div class="card-page-header">
+      <button id="backBtn" class="btn btn-secondary btn-sm">← Назад</button>
+      <div class="card-page-title-block">
+        <h1 class="card-page-h1" id="cardPageTitle">—</h1>
+        <span id="cardPageBadge" class="pill pill-accent"></span>
+      </div>
+    </div>
+
+    <div class="card-tab-bar" role="tablist">
+      <button class="card-tab-btn active" data-tab="profile">Профиль</button>
+      <button class="card-tab-btn" data-tab="agreements">Договорённости</button>
+      <button class="card-tab-btn" data-tab="requests">Запрос и заметки</button>
+      <button class="card-tab-btn" data-tab="plan">План работы</button>
+    </div>
+
+    <div class="card-content">
+      <div id="tab-profile"    class="tab-panel active"></div>
+      <div id="tab-agreements" class="tab-panel"></div>
+      <div id="tab-requests"   class="tab-panel"></div>
+      <div id="tab-plan"       class="tab-panel"></div>
+    </div>
+
+    <div class="card-footer">
+      <button id="cardSaveBtn" class="btn btn-primary">Сохранить изменения</button>
+      <span id="cardSaveStatus" style="font-size:12px;color:var(--text-soft);"></span>
+    </div>
+  </div>
+
+  <!-- ══ Settings modal ══ -->
+  <div id="settingsModal" class="settings-modal" role="dialog" aria-modal="true">
+    <div class="settings-box">
+      <h2>Настройки</h2>
+      <p>Ключ Anthropic API нужен для разбора заметок через Claude.<br>
+         Хранится только в localStorage этого браузера.</p>
+      <label class="field-label" for="apiKeyInput">Anthropic API Key</label>
+      <input id="apiKeyInput" class="input" type="password"
+        placeholder="sk-ant-…" style="margin-bottom:16px;" />
+      <div style="display:flex;gap:8px;">
+        <button id="saveSettingsBtn" class="btn btn-primary btn-sm">Сохранить</button>
+        <button id="closeSettingsBtn" class="btn btn-secondary btn-sm">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
+  <button id="themeToggle" class="theme-toggle" type="button"
+    title="Переключить тему" aria-label="Переключить тему"></button>
 
   <div id="toast" class="toast" role="status" aria-live="polite">
     <div id="toastTitle" class="toast-title"></div>
-    <div id="toastText" class="toast-text"></div>
+    <div id="toastText"  class="toast-text"></div>
   </div>
 
   <script>
-    /**********************************************************************
-     * ПЕРЕКЛЮЧАТЕЛЬ ТЕМ
-     **********************************************************************/
+    /******************************************************************
+     * ТЕМА
+     ******************************************************************/
     (function () {
-      const saved = localStorage.getItem('theme');
-      // default is dark (original theme); light only when explicitly saved
-      if (saved !== 'light') document.body.classList.add('dark');
+      if (localStorage.getItem('theme') !== 'light') document.body.classList.add('dark');
 
       function updateIcon() {
         const btn = document.getElementById('themeToggle');
@@ -1109,413 +769,185 @@
         document.getElementById('themeToggle').addEventListener('click', function () {
           document.body.classList.toggle('dark');
           localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
-          // 'dark' = dark theme, 'light' = light theme
           updateIcon();
         });
       });
     })();
 
-    /**********************************************************************
-     * СХЕМА КАРТЫ ПО РЕАЛЬНОМУ ШАБЛОНУ
-     **********************************************************************/
-    const stageNumbers = [1, 2, 3, 4, 5];
-
+    /******************************************************************
+     * СТРУКТУРА КАРТЫ
+     ******************************************************************/
     function createEmptyImplementationRows(count = 6) {
       return Array.from({ length: count }, () => ({
-        dateTopic: "",
-        motiveExercise: "",
-        noteObservation: ""
+        date: "", topic: "", motiveExercise: "", noteObservation: ""
       }));
     }
 
-    function createEmptyMeetingRows(count = 8) {
-      return Array.from({ length: count }, () => ({
-        date: "",
-        topic: "",
-        exercises: ""
-      }));
-    }
-
-    function createEmptyNoteRows(count = 8) {
-      return Array.from({ length: count }, () => ({
-        date: "",
-        content: "",
-        observation: ""
-      }));
-    }
-
-    function buildEmptyCard(displayName = "Новый клиент", createdAt = new Date().toISOString().slice(0, 10)) {
+    function buildEmptyCard(displayName = "Новый клиент") {
       return {
-        passport: {
-          clientDisplayName: displayName,
-          man: "",
-          child: "",
-          woman: "",
+        fullName:          displayName,
+        gender:            "",
+        frequency:         "1 занятие (50 мин) в неделю",
+        cost:              "7000",
+        rules:             "Ознакомлен(а)",
+        otherAgreements:   "",
+        complaints:        "",
+        request:           "",
+        therapyTargets:    "",
+        cardNotes:         "",
+        completionCriteria:"",
+        personalityType:   "",
+        education:         "",
+        family:            "",
+        chronicDiseases:   "",
+        psychiatrist:      "",
+        father:            "",
+        mother:            "",
+        siblings:          "",
+        children:          "",
+        biography:         "",
+        hypotheses:        "",
+        therapyPlan1:      "",
+        therapyPlan2:      "",
+        therapyPlan3:      "",
+        therapyPlan4:      "",
+        therapyPlan5:      "",
+        stages: {
+          1: { implementation: createEmptyImplementationRows() },
+          2: { implementation: createEmptyImplementationRows() },
+          3: { implementation: createEmptyImplementationRows() },
+          4: { implementation: createEmptyImplementationRows() },
+          5: { implementation: createEmptyImplementationRows() }
         },
-        agreements: {
-          frequencyDuration: "1 занятие (50 мин) в неделю",
-          cost: "7000",
-          rules: "Ознакомлен(а)",
-          other: ""
-        },
-        therapyCore: {
-          complaints: "",
-          request: "",
-          therapyTargets: "",
-          therapyNotes: "",
-          completionCriteria: "",
-          completionNotes: ""
-        },
-        notes: {
-          personalityType: "",
-          educationProfession: "",
-          familyComposition: "",
-          chronicDiseases: "",
-          psychiatristObservations: "",
-          father: "",
-          mother: "",
-          siblings: "",
-          children: "",
-          importantBiography: ""
-        },
-        plan: {
-          hypotheses: "",
-          stages: {
-            1: { plan: "", implementation: createEmptyImplementationRows() },
-            2: { plan: "", implementation: createEmptyImplementationRows() },
-            3: { plan: "", implementation: createEmptyImplementationRows() },
-            4: { plan: "", implementation: createEmptyImplementationRows() },
-            5: { plan: "", implementation: createEmptyImplementationRows() }
-          }
-        },
-        logs: {
-          registrationMeetings: createEmptyMeetingRows(),
-          sessionNotes: createEmptyNoteRows()
-        },
-        meta: {
-          createdAt
-        }
+        sessions:   [],
+        createdAt:  new Date().toISOString().slice(0, 10)
       };
     }
 
-    /**********************************************************************
+    /******************************************************************
      * ДЕМО-ДАННЫЕ
-     **********************************************************************/
+     ******************************************************************/
     const demoClients = [
       {
         id: "anna_2332",
         displayName: "Анна 2332",
         shortStatus: "Активная карта",
-        genderAge: "женщина, 36 лет",
-        noteCount: 8,
-        card: {
-          passport: {
-            clientDisplayName: "Анна 2332",
-            man: "",
-            child: "",
-            woman: "Анна, 36"
-          },
-          agreements: {
-            frequencyDuration: "1 занятие (50 мин) в неделю",
-            cost: "7000",
-            rules: "Ознакомлен(а)",
-            other: ""
-          },
-          therapyCore: {
-            complaints: "Амбивалентные чувства, не понимаю себя, нет любви к близким, теряю себя, когда сыпется критика",
-            request: "Разобраться в себе",
-            therapyTargets:
-`1. Нестабильная идентичность и потеря себя при критике: формирование устойчивого образа «Я», независимого от внешних оценок.
-2. Экстернальный локус контроля: развитие способности принимать ответственность за свою жизнь и решения.
+        lastSession: "18.03.2026",
+        card: Object.assign(buildEmptyCard("Анна 2332"), {
+          gender: "female",
+          complaints: "Амбивалентные чувства, не понимаю себя, нет любви к близким, теряю себя, когда сыпется критика",
+          request: "Разобраться в себе",
+          therapyTargets:
+`1. Нестабильная идентичность и потеря себя при критике: формирование устойчивого образа «Я».
+2. Экстернальный локус контроля: развитие способности принимать ответственность.
 3. Незавершённый развод: проработка чувств, связанных с окончанием отношений.
-4. Амбивалентность чувств и отсутствие любви к близким: исследование подавленных эмоций.
-5. Поиск «ответственного мужчины» как проекция: интеграция собственной взрослой части.
-6. Низкая самооценка и страх отвержения: работа с внутренним критиком.
-7. Сепарация от родительских фигур: обретение автономии.`,
-            therapyNotes: "",
-            completionCriteria:
+4. Поиск «ответственного мужчины» как проекция: интеграция собственной взрослой части.`,
+          completionCriteria:
 `1. Устойчивость к критике: клиентка может слышать критику, не разрушаясь внутренне.
 2. Более ясное чувство себя и опоры на себя.
-3. Продвижение в вопросе развода и автономии.
-4. Больше живого контакта с чувствами к близким.`,
-            completionNotes: ""
-          },
-          notes: {
-            personalityType: "",
-            educationProfession: "",
-            familyComposition: "",
-            chronicDiseases: "",
-            psychiatristObservations: "",
-            father: "",
-            mother: "",
-            siblings: "",
-            children: "",
-            importantBiography: "Незавершённый развод, выраженная чувствительность к критике, поиск внешней опоры."
-          },
-          plan: {
-            hypotheses:
+3. Продвижение в вопросе развода и автономии.`,
+          biography: "Незавершённый развод, выраженная чувствительность к критике, поиск внешней опоры.",
+          hypotheses:
 `1. Самооценка сильно зависит от внешнего одобрения.
 2. Критика переживается как угроза целостности Я.
-3. Образ «ответственного мужчины» может быть проекцией собственной неинтегрированной взрослой части.`,
-            stages: {
-              1: {
-                plan:
-`Этап 1: Стабилизация, сбор материала, контакт с текущими чувствами.
-Цель: создать базовую опору и рабочий альянс.`,
-                implementation: [
-                  { dateTopic: "16.03.2026 — Первичная встреча", motiveExercise: "Сбор материала, первичная формулировка запроса", noteObservation: "Высокая уязвимость к критике." },
-                  { dateTopic: "18.03.2026 — Ресурсирование", motiveExercise: "Ресурсные образы, дыхание", noteObservation: "Немного выше устойчивость." },
-                  ...createEmptyImplementationRows(4)
-                ]
-              },
-              2: {
-                plan:
-`Этап 2: Работа с самооценкой и критикой.
-Цель: снижение чувствительности к критике, формирование внутренней опоры и более устойчивого образа Я.`,
-                implementation: [
-                  { dateTopic: "", motiveExercise: "", noteObservation: "" },
-                  { dateTopic: "", motiveExercise: "", noteObservation: "" },
-                  { dateTopic: "", motiveExercise: "", noteObservation: "" },
-                  { dateTopic: "", motiveExercise: "", noteObservation: "" },
-                  { dateTopic: "", motiveExercise: "", noteObservation: "" },
-                  { dateTopic: "", motiveExercise: "", noteObservation: "" }
-                ]
-              },
-              3: {
-                plan:
-`Этап 3: Проработка незавершённого развода и сепарация.
-Цель: завершение внутренних отношений с мужем, прояснение потребности в «ответственном мужчине».`,
-                implementation: createEmptyImplementationRows()
-              },
-              4: {
-                plan:
-`Этап 4: Работа с амбивалентностью и восстановлением любви к близким.
-Цель: исследование подавленных чувств, развитие способности к близости без страха потерять себя.`,
-                implementation: createEmptyImplementationRows()
-              },
-              5: {
-                plan:
-`Этап 5: Интеграция, принятие ответственности и завершение.
-Цель: закрепление новой устойчивости и подготовка к завершению терапии.`,
-                implementation: createEmptyImplementationRows()
-              }
-            }
-          },
-          logs: {
-            registrationMeetings: [
-              { date: "16.03.2026", topic: "Первичная встреча", exercises: "Сбор материала" },
-              { date: "18.03.2026", topic: "Ресурсирование", exercises: "Ресурсные техники" },
-              ...createEmptyMeetingRows(6)
-            ],
-            sessionNotes: [
-              { date: "16.03.2026", content: "Сформулирован запрос на разбор внутренних противоречий.", observation: "Высокая уязвимость." },
-              { date: "18.03.2026", content: "Обсуждали реакцию на критику и потерю контакта с собой.", observation: "Появилось больше осознавания." },
-              ...createEmptyNoteRows(6)
-            ]
-          },
-          meta: {
-            createdAt: "2026-03-16"
+3. Образ «ответственного мужчины» — проекция собственной неинтегрированной взрослой части.`,
+          therapyPlan1: "Этап 1: Стабилизация, сбор материала, контакт с текущими чувствами.\nЦель: создать базовую опору и рабочий альянс.",
+          therapyPlan2: "Этап 2: Работа с самооценкой и критикой.\nЦель: снижение чувствительности к критике, формирование внутренней опоры.",
+          therapyPlan3: "Этап 3: Проработка незавершённого развода и сепарация.",
+          therapyPlan4: "Этап 4: Работа с амбивалентностью и восстановлением любви к близким.",
+          therapyPlan5: "Этап 5: Интеграция, принятие ответственности и завершение.",
+          createdAt: "2026-03-16",
+          stages: {
+            1: { implementation: [
+              { date:"16.03.2026", topic:"Первичная встреча", motiveExercise:"Сбор материала, формулировка запроса", noteObservation:"Высокая уязвимость к критике." },
+              { date:"18.03.2026", topic:"Ресурсирование",   motiveExercise:"Ресурсные образы, дыхание",             noteObservation:"Немного выше устойчивость."  },
+              ...createEmptyImplementationRows(4)
+            ]},
+            2: { implementation: createEmptyImplementationRows() },
+            3: { implementation: createEmptyImplementationRows() },
+            4: { implementation: createEmptyImplementationRows() },
+            5: { implementation: createEmptyImplementationRows() }
           }
-        }
+        })
       },
       {
         id: "natalya_3445",
         displayName: "Наталья 3445",
         shortStatus: "Требует обновления",
-        genderAge: "женщина, 29 лет",
-        noteCount: 5,
-        card: {
-          passport: {
-            clientDisplayName: "Наталья 3445",
-            man: "",
-            child: "",
-            woman: "Наталья, 29"
-          },
-          agreements: {
-            frequencyDuration: "1 занятие (50 мин) в неделю",
-            cost: "7000",
-            rules: "Ознакомлен(а)",
-            other: ""
-          },
-          therapyCore: {
-            complaints: "Трудности в отношениях, внутренний стыд, напряжение в самопрезентации",
-            request: "Понять, почему так важно выглядеть лучше других",
-            therapyTargets: "Исследование стыда, демонстративности, механизмов самозащиты.",
-            therapyNotes: "",
-            completionCriteria: "Более спокойная самопрезентация, меньшая зависимость от оценки окружающих.",
-            completionNotes: ""
-          },
-          notes: {
-            personalityType: "",
-            educationProfession: "",
-            familyComposition: "",
-            chronicDiseases: "",
-            psychiatristObservations: "",
-            father: "",
-            mother: "",
-            siblings: "",
-            children: "",
-            importantBiography: "Повышенная чувствительность к внешней оценке."
-          },
-          plan: {
-            hypotheses: "Демонстративность может быть защитой от переживания собственной неценности.",
-            stages: {
-              1: { plan: "Сбор наблюдений, карта самопрезентации.", implementation: createEmptyImplementationRows() },
-              2: { plan: "", implementation: createEmptyImplementationRows() },
-              3: { plan: "", implementation: createEmptyImplementationRows() },
-              4: { plan: "", implementation: createEmptyImplementationRows() },
-              5: { plan: "", implementation: createEmptyImplementationRows() }
-            }
-          },
-          logs: {
-            registrationMeetings: [
-              { date: "14.03.2026", topic: "Сессия 1", exercises: "Наблюдение за самоподачей" },
-              ...createEmptyMeetingRows(7)
-            ],
-            sessionNotes: [
-              { date: "14.03.2026", content: "Выявлены демонстративные паттерны и тема наблюдения за самоподачей.", observation: "Хороший уровень рефлексии." },
-              ...createEmptyNoteRows(7)
-            ]
-          },
-          meta: {
-            createdAt: "2026-03-12"
-          }
-        }
+        lastSession: "14.03.2026",
+        card: Object.assign(buildEmptyCard("Наталья 3445"), {
+          gender: "female",
+          complaints: "Трудности в отношениях, внутренний стыд, напряжение в самопрезентации",
+          request: "Понять, почему так важно выглядеть лучше других",
+          therapyTargets: "Исследование стыда, демонстративности, механизмов самозащиты.",
+          completionCriteria: "Более спокойная самопрезентация, меньшая зависимость от оценки окружающих.",
+          biography: "Повышенная чувствительность к внешней оценке.",
+          hypotheses: "Демонстративность может быть защитой от переживания собственной неценности.",
+          therapyPlan1: "Сбор наблюдений, карта самопрезентации.",
+          createdAt: "2026-03-12"
+        })
       }
     ];
 
-    /**********************************************************************
+    /******************************************************************
      * СОСТОЯНИЕ
-     **********************************************************************/
+     ******************************************************************/
     const state = {
-      clients: structuredClone(demoClients),
-      filteredClients: structuredClone(demoClients),
-      activeClientId: demoClients[0].id,
-      taskType: "intake_create_or_update",
-      cardLoaded: true,
-      previewSummary: "Здесь появится preview изменений."
+      clients:         [],
+      filteredClients: [],
+      activeClientId:  null,
+      taskType:        "intake_create_or_update",
+      pendingParsed:   null   // для AI-разбора (второй клик = перезаписать)
     };
 
-    /**********************************************************************
-     * DOM
-     **********************************************************************/
-    const clientList = document.getElementById("clientList");
-    const searchClientInput = document.getElementById("searchClientInput");
-
-    const noteInput = document.getElementById("noteInput");
-    const manualClientInput = document.getElementById("manualClientInput");
-    const taskTypeSelect = document.getElementById("taskTypeSelect");
-    const firstLinePreview = document.getElementById("firstLinePreview");
-
-    const modeStatusPill = document.getElementById("modeStatusPill");
-    const clientStatusPill = document.getElementById("clientStatusPill");
-    const cardStatusPill = document.getElementById("cardStatusPill");
-    const docModePill = document.getElementById("docModePill");
-
-    const previewText = document.getElementById("previewText");
-    const previewBadge = document.getElementById("previewBadge");
-    const docSheet = document.getElementById("docSheet");
-
-    const primaryIntakeButton = document.getElementById("primaryIntakeButton");
-    const findOrCreateButton = document.getElementById("findOrCreateButton");
-    const sendToLlmButton = document.getElementById("sendToLlmButton");
-    const previewButton = document.getElementById("previewButton");
-    const saveButton = document.getElementById("saveButton");
-    const clearButton = document.getElementById("clearButton");
-
-    const downloadButton = document.getElementById("downloadButton");
-    const backupButton = document.getElementById("backupButton");
-    const simulateButton = document.getElementById("simulateButton");
-
-    const segmentButtons = Array.from(document.querySelectorAll(".segment-btn"));
-
-    const toast = document.getElementById("toast");
-    const toastTitle = document.getElementById("toastTitle");
-    const toastText = document.getElementById("toastText");
-
-    /**********************************************************************
-     * УТИЛИТЫ
-     **********************************************************************/
+    /******************************************************************
+     * УТИЛИТЫ (не трогать parseNoteFields, translitToId, isValidClientKey)
+     ******************************************************************/
     function escapeHtml(value = "") {
       return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+        .replaceAll("&","&amp;").replaceAll("<","&lt;")
+        .replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
     }
 
     function showToast(title, text) {
-      toastTitle.textContent = title;
-      toastText.textContent = text;
+      document.getElementById("toastTitle").textContent = title;
+      document.getElementById("toastText").textContent  = text;
+      const toast = document.getElementById("toast");
       toast.classList.add("show");
-      clearTimeout(showToast._timer);
-      showToast._timer = setTimeout(() => {
-        toast.classList.remove("show");
-      }, 3400);
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => toast.classList.remove("show"), 3400);
     }
 
     function getActiveClient() {
-      return state.clients.find(client => client.id === state.activeClientId) || null;
+      return state.clients.find(c => c.id === state.activeClientId) || null;
     }
 
-    function getFirstLine(text) {
-      return (text || "").split("\n")[0].trim();
-    }
+    function getFirstLine(text) { return (text || "").split("\n")[0].trim(); }
 
     function isValidClientKey(value) {
-      const pattern = /^([А-Яа-яЁёA-Za-z\-]+)\s(\d{4})$/;
-      return pattern.test((value || "").trim());
+      return /^([А-Яа-яЁёA-Za-z\-]+)\s(\d{4})$/.test((value || "").trim());
     }
 
     function translitToId(clientKey) {
       const map = {
-        а:"a", б:"b", в:"v", г:"g", д:"d", е:"e", ё:"e", ж:"zh", з:"z", и:"i", й:"y",
-        к:"k", л:"l", м:"m", н:"n", о:"o", п:"p", р:"r", с:"s", т:"t", у:"u", ф:"f",
-        х:"h", ц:"ts", ч:"ch", ш:"sh", щ:"sch", ъ:"", ы:"y", ь:"", э:"e", ю:"yu", я:"ya"
+        а:"a",б:"b",в:"v",г:"g",д:"d",е:"e",ё:"e",ж:"zh",з:"z",и:"i",й:"y",
+        к:"k",л:"l",м:"m",н:"n",о:"o",п:"p",р:"r",с:"s",т:"t",у:"u",ф:"f",
+        х:"h",ц:"ts",ч:"ch",ш:"sh",щ:"sch",ъ:"",ы:"y",ь:"",э:"e",ю:"yu",я:"ya"
       };
-
-      return clientKey
-        .toLowerCase()
-        .split("")
-        .map(char => map[char] ?? char)
-        .join("")
-        .replace(/\s+/g, "_")
-        .replace(/[^a-z0-9_]/g, "");
+      return clientKey.toLowerCase().split("")
+        .map(c => map[c] ?? c).join("")
+        .replace(/\s+/g,"_").replace(/[^a-z0-9_]/g,"");
     }
 
-    function formatTaskType(taskType) {
-      switch (taskType) {
-        case "intake_create_or_update":
-          return "первичный приём";
-        case "session_update":
-          return "после встречи";
-        case "client_plan_update":
-          return "план клиента";
-        default:
-          return taskType;
-      }
-    }
-
-    function resolveClientKey() {
-      const manual = manualClientInput.value.trim();
-      const fromFirstLine = getFirstLine(noteInput.value);
-      const activeClient = getActiveClient();
-      if (manual) return manual;
-      if (fromFirstLine) return fromFirstLine;
-      if (activeClient) return activeClient.displayName;
-      return "";
+    function formatTaskType(t) {
+      return { intake_create_or_update:"первичный приём", session_update:"после встречи", client_plan_update:"план клиента" }[t] || t;
     }
 
     function parseNoteFields(noteText) {
-      const lines = (noteText || "")
-        .split("\n")
-        .map(line => line.trim())
-        .filter(Boolean);
-
+      const lines = (noteText||"").split("\n").map(l=>l.trim()).filter(Boolean);
       const result = {};
       for (const line of lines.slice(1)) {
-        const cleaned = line.replace(/^[-•\d.)\s]+/, "").trim();
+        const cleaned = line.replace(/^[-•\d.)\s]+/,"").trim();
         const parts = cleaned.split(":");
         if (parts.length >= 2) {
           const key = parts.shift().trim();
@@ -1526,697 +958,658 @@
       return result;
     }
 
-    /**********************************************************************
-     * ПРИМЕНЕНИЕ ПОЛЕЙ ЗАМЕТКИ К СТРУКТУРЕ КАРТЫ
-     **********************************************************************/
-    function buildPreviewCard() {
-      const activeClient = getActiveClient();
-      const base = activeClient
-        ? JSON.parse(JSON.stringify(activeClient.card))
-        : buildEmptyCard(resolveClientKey() || "Новый клиент");
-
-      const parsed = parseNoteFields(noteInput.value.trim());
-      const clientKey = resolveClientKey();
-
-      if (clientKey) {
-        base.passport.clientDisplayName = clientKey;
-      }
-
-      const genderAgeRaw = parsed["Пол и возраст"] || "";
-      if (genderAgeRaw) {
-        const lower = genderAgeRaw.toLowerCase();
-        if (lower.includes("жен")) base.passport.woman = genderAgeRaw.replace(/^женщина[, ]*/i, "").trim() || genderAgeRaw;
-        else if (lower.includes("муж")) base.passport.man = genderAgeRaw.replace(/^мужчина[, ]*/i, "").trim() || genderAgeRaw;
-        else if (lower.includes("реб")) base.passport.child = genderAgeRaw.replace(/^ребенок[, ]*/i, "").trim() || genderAgeRaw;
-        else base.passport.woman = genderAgeRaw;
-      }
-
-      if (parsed["Частота, продолжительность"]) base.agreements.frequencyDuration = parsed["Частота, продолжительность"];
-      if (parsed["Стоимость"]) base.agreements.cost = parsed["Стоимость"];
-      if (parsed["Правила"]) base.agreements.rules = parsed["Правила"];
-      if (parsed["Другие договоренности"] || parsed["Другие договорённости"]) {
-        base.agreements.other = parsed["Другие договоренности"] || parsed["Другие договорённости"];
-      }
-
-      if (parsed["Жалобы"]) base.therapyCore.complaints = parsed["Жалобы"];
-      if (parsed["Запрос"] || parsed["Запрос (словами клиента)"]) {
-        base.therapyCore.request = parsed["Запрос"] || parsed["Запрос (словами клиента)"];
-      }
-      if (parsed["Мишени терапии"]) base.therapyCore.therapyTargets = parsed["Мишени терапии"];
-      if (parsed["Примечания"]) base.therapyCore.therapyNotes = parsed["Примечания"];
-      if (parsed["Критерии завершения терапии"] || parsed["Критерии завершения работы"]) {
-        base.therapyCore.completionCriteria = parsed["Критерии завершения терапии"] || parsed["Критерии завершения работы"];
-      }
-      if (parsed["Примечания к завершению"]) base.therapyCore.completionNotes = parsed["Примечания к завершению"];
-
-      if (parsed["Тип личности"]) base.notes.personalityType = parsed["Тип личности"];
-      if (parsed["Образование, профессия"]) base.notes.educationProfession = parsed["Образование, профессия"];
-      if (parsed["Состав семьи, в которой живет"] || parsed["Состав семьи, в которой живёт"]) {
-        base.notes.familyComposition = parsed["Состав семьи, в которой живет"] || parsed["Состав семьи, в которой живёт"];
-      }
-      if (parsed["Хронические заболевания"]) base.notes.chronicDiseases = parsed["Хронические заболевания"];
-      if (parsed["Наблюдения у психиатра"]) base.notes.psychiatristObservations = parsed["Наблюдения у психиатра"];
-      if (parsed["Отец"]) base.notes.father = parsed["Отец"];
-      if (parsed["Мать"]) base.notes.mother = parsed["Мать"];
-      if (parsed["Сиблинги"]) base.notes.siblings = parsed["Сиблинги"];
-      if (parsed["Дети"]) base.notes.children = parsed["Дети"];
-      if (parsed["Важные биографические события"]) base.notes.importantBiography = parsed["Важные биографические события"];
-
-      if (parsed["Гипотезы"]) base.plan.hypotheses = parsed["Гипотезы"];
-
-      for (const stage of stageNumbers) {
-        const planKeyA = `${stage} этап работы`;
-        const planKeyB = `План работы ${stage} этап`;
-        const planKeyC = `ПЛАН РАБОТЫ ${stage} этап`;
-        if (parsed[planKeyA] || parsed[planKeyB] || parsed[planKeyC]) {
-          base.plan.stages[stage].plan = parsed[planKeyA] || parsed[planKeyB] || parsed[planKeyC];
-        }
-      }
-
-      if (state.taskType === "session_update") {
-        const body = noteInput.value.split("\n").slice(1).join("\n").trim();
-        if (body) {
-          const sessionDate = new Date().toLocaleDateString("ru-RU");
-          const nextMeeting = {
-            date: sessionDate,
-            topic: parsed["Тема"] || "Новая встреча",
-            exercises: parsed["Упражнения"] || parsed["Мотив / Упражнение"] || ""
-          };
-          const nextNote = {
-            date: sessionDate,
-            content: body,
-            observation: parsed["Наблюдения"] || parsed["Примечание / Наблюдение"] || ""
-          };
-          base.logs.registrationMeetings.unshift(nextMeeting);
-          base.logs.sessionNotes.unshift(nextNote);
-          base.logs.registrationMeetings = base.logs.registrationMeetings.slice(0, 10);
-          base.logs.sessionNotes = base.logs.sessionNotes.slice(0, 10);
-        }
-      }
-
-      if (state.taskType === "client_plan_update") {
-        const body = noteInput.value.split("\n").slice(1).join("\n").trim();
-        if (body) {
-          if (!base.plan.hypotheses) base.plan.hypotheses = body;
-          else base.plan.hypotheses += `\n\n${body}`;
-        }
-      }
-
-      return base;
+    /******************************************************************
+     * LOCALSTORAGE
+     ******************************************************************/
+    function saveToLocalStorage() {
+      try { localStorage.setItem("psy_clients", JSON.stringify(state.clients)); }
+      catch(e) { console.warn("Ошибка записи:", e); }
     }
 
-    function buildPreviewSummary(card) {
-      const parts = [];
-      const clientKey = resolveClientKey();
-
-      if (clientKey) parts.push(`Клиент: ${clientKey}`);
-      parts.push(`Тип задачи: ${formatTaskType(state.taskType)}`);
-
-      if (card.therapyCore.complaints) parts.push(`Жалобы: ${card.therapyCore.complaints}`);
-      if (card.therapyCore.request) parts.push(`Запрос: ${card.therapyCore.request}`);
-      if (card.therapyCore.therapyTargets) parts.push(`Мишени терапии: ${card.therapyCore.therapyTargets}`);
-      if (card.plan.hypotheses) parts.push(`Гипотезы: ${card.plan.hypotheses}`);
-
-      const firstMeeting = card.logs.registrationMeetings.find(row => row.date || row.topic || row.exercises);
-      if (firstMeeting) {
-        parts.push(`Регистрация встреч: ${[firstMeeting.date, firstMeeting.topic, firstMeeting.exercises].filter(Boolean).join(" / ")}`);
-      }
-
-      return parts.join("\n");
+    function loadFromLocalStorage() {
+      try {
+        const saved = localStorage.getItem("psy_clients");
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            state.clients = parsed;
+            return true;
+          }
+        }
+      } catch(e) { console.warn("Ошибка чтения:", e); }
+      return false;
     }
 
-    /**********************************************************************
-     * РЕНДЕР
-     **********************************************************************/
+    /******************************************************************
+     * НАВИГАЦИЯ МЕЖДУ СТРАНИЦАМИ
+     ******************************************************************/
+    function showPage(page) {
+      const appEl     = document.getElementById("appPage");
+      const cardEl    = document.getElementById("pageCard");
+      if (page === "client-card") {
+        appEl.style.display = "none";
+        cardEl.classList.add("visible");
+        renderClientCard();
+      } else {
+        appEl.style.display = "grid";
+        cardEl.classList.remove("visible");
+        renderWorkArea();
+      }
+    }
+
+    /******************************************************************
+     * РЕНДЕР — СПИСОК КЛИЕНТОВ
+     ******************************************************************/
     function renderClientList() {
-      clientList.innerHTML = "";
+      const list = document.getElementById("clientList");
+      list.innerHTML = "";
 
       if (!state.filteredClients.length) {
-        clientList.innerHTML = `
-          <div class="client-item" style="cursor: default;">
-            <div class="client-name">Ничего не найдено</div>
-            <div class="client-meta">Попробуйте другое имя, цифры или часть запроса.</div>
-          </div>
-        `;
+        list.innerHTML = `<div class="client-item" style="cursor:default;">
+          <div class="client-name">Ничего не найдено</div>
+          <div class="client-meta">Попробуйте другой запрос</div>
+        </div>`;
         return;
       }
 
       state.filteredClients.forEach(client => {
-        const wrapper = document.createElement("div");
-        wrapper.style.cssText = "position:relative;display:flex;align-items:stretch;";
+        const wrap = document.createElement("div");
+        wrap.className = "client-item-wrap";
 
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = "client-item" + (client.id === state.activeClientId ? " active" : "");
-        button.style.flex = "1";
-        button.innerHTML = `
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "client-item" + (client.id === state.activeClientId ? " active" : "");
+        btn.innerHTML = `
           <div class="client-name">${escapeHtml(client.displayName)}</div>
           <div class="client-meta">
-            <span>${escapeHtml(client.genderAge)}</span>
             <span>${escapeHtml(client.shortStatus)}</span>
-            <span>заметок: ${escapeHtml(String(client.noteCount))}</span>
-          </div>
-        `;
-        button.addEventListener("click", () => {
+            <span>Сессия: ${escapeHtml(client.lastSession || "—")}</span>
+          </div>`;
+        btn.addEventListener("click", () => {
           state.activeClientId = client.id;
-          state.cardLoaded = true;
-          renderAll();
+          renderClientList();
+          showPage("client-card");
         });
 
-        const deleteBtn = document.createElement("button");
-        deleteBtn.type = "button";
-        deleteBtn.title = "Удалить клиента";
-        deleteBtn.textContent = "×";
-        deleteBtn.style.cssText = "background:none;border:none;color:#e57373;font-size:18px;padding:0 10px;cursor:pointer;opacity:0.7;flex-shrink:0;";
-        deleteBtn.addEventListener("mouseenter", () => deleteBtn.style.opacity = "1");
-        deleteBtn.addEventListener("mouseleave", () => deleteBtn.style.opacity = "0.7");
-        deleteBtn.addEventListener("click", async (e) => {
+        const del = document.createElement("button");
+        del.type = "button";
+        del.className = "client-delete-btn";
+        del.title = "Удалить клиента";
+        del.textContent = "×";
+        del.addEventListener("click", async (e) => {
           e.stopPropagation();
-          if (!confirm(`Удалить клиента «${client.displayName}»? Backup будет создан автоматически.`)) return;
+          if (!confirm(`Удалить клиента «${client.displayName}»?`)) return;
           try {
             const res = await fetch(`${BASE_URL}/api/clients/${client.id}`, { method: "DELETE" });
             if (!res.ok) throw new Error(await res.text());
-            state.clients = state.clients.filter(c => c.id !== client.id);
-            if (state.activeClientId === client.id) {
-              state.activeClientId = null;
-              state.cardLoaded = false;
-            }
-            renderAll();
-            showToast(`Клиент «${client.displayName}» удалён`, "success");
-          } catch (err) {
-            showToast("Ошибка удаления: " + err.message, "error");
-          }
+          } catch(_) {}
+          state.clients = state.clients.filter(c => c.id !== client.id);
+          if (state.activeClientId === client.id) state.activeClientId = null;
+          saveToLocalStorage();
+          renderAll();
         });
 
-        wrapper.appendChild(button);
-        wrapper.appendChild(deleteBtn);
-        clientList.appendChild(wrapper);
+        wrap.appendChild(btn);
+        wrap.appendChild(del);
+        list.appendChild(wrap);
       });
     }
 
-    function renderText(value) {
-      return value && String(value).trim()
-        ? escapeHtml(String(value))
-        : '<span class="doc-empty">Пока не заполнено</span>';
-    }
+    /******************************************************************
+     * РЕНДЕР — РАБОЧАЯ ЗОНА (страница 1)
+     ******************************************************************/
+    function renderWorkArea() {
+      const client    = getActiveClient();
+      const emptyEl   = document.getElementById("emptyState");
+      const workEl    = document.getElementById("workArea");
 
-    function renderField(label, value) {
-      return `
-        <div class="doc-field">
-          <span class="doc-label">${escapeHtml(label)}</span>
-          <div class="doc-value">${renderText(value)}</div>
-        </div>
-      `;
-    }
-
-    function renderRowsTable(headers, rows, keyOrder) {
-      const bodyRows = rows
-        .map(row => {
-          const hasData = keyOrder.some(key => row[key] && String(row[key]).trim());
-          if (!hasData) return "";
-          return `
-            <tr>
-              ${keyOrder.map(key => `<td>${renderText(row[key])}</td>`).join("")}
-            </tr>
-          `;
-        })
-        .filter(Boolean)
-        .join("");
-
-      const emptyRow = `
-        <tr>
-          ${keyOrder.map(() => `<td><span class="doc-empty">Пусто</span></td>`).join("")}
-        </tr>
-      `;
-
-      return `
-        <div class="doc-table-wrap">
-          <table class="doc-table">
-            <thead>
-              <tr>${headers.map(h => `<th>${escapeHtml(h)}</th>`).join("")}</tr>
-            </thead>
-            <tbody>
-              ${bodyRows || emptyRow}
-            </tbody>
-          </table>
-        </div>
-      `;
-    }
-
-    function renderDocument() {
-      const client = getActiveClient();
-      const card = buildPreviewCard();
-      const clientKey = resolveClientKey() || (client ? client.displayName : "Новый клиент");
-
-      const genderAgeLabel =
-        card.passport.woman ? `Женщина: ${card.passport.woman}` :
-        card.passport.man ? `Мужчина: ${card.passport.man}` :
-        card.passport.child ? `Ребёнок: ${card.passport.child}` :
-        "Пол и возраст не указаны";
-
-      const createdAt = card.meta.createdAt || (client ? client.card.meta.createdAt : new Date().toISOString().slice(0, 10));
-      const status = client ? client.shortStatus : "Новая карта";
-
-      const stagesHtml = stageNumbers.map(stage => {
-        const stageData = card.plan.stages[stage];
-        return `
-          <div class="doc-subsection">
-            <h3 class="doc-subtitle">План работы ${stage} этап</h3>
-            <div class="doc-fields">
-              ${renderField(`${stage} этап работы`, stageData.plan)}
-            </div>
-          </div>
-
-          <div class="doc-subsection">
-            <h3 class="doc-subtitle">Реализация ${stage} этап</h3>
-            ${renderRowsTable(
-              ["Дата / Тема", "Мотив / Упражнение", "Примечание / Наблюдение"],
-              stageData.implementation,
-              ["dateTopic", "motiveExercise", "noteObservation"]
-            )}
-          </div>
-        `;
-      }).join('<div class="doc-divider"></div>');
-
-      docSheet.innerHTML = `
-        <header class="doc-header">
-          <div class="doc-kicker">Карта клиента психолога</div>
-          <h1 class="doc-name">${escapeHtml(clientKey)}</h1>
-          <div class="doc-meta">
-            <span>${escapeHtml(genderAgeLabel)}</span>
-            <span>Создана: ${escapeHtml(createdAt)}</span>
-            <span>Статус: ${escapeHtml(status)}</span>
-          </div>
-        </header>
-
-        <section class="doc-section">
-          <h2 class="doc-section-title">ФИО клиента, возраст</h2>
-          <div class="doc-fields">
-            ${renderField("Мужчина", card.passport.man)}
-            ${renderField("Ребёнок", card.passport.child)}
-            ${renderField("Женщина", card.passport.woman)}
-          </div>
-          <div class="doc-divider"></div>
-        </section>
-
-        <section class="doc-section">
-          <h2 class="doc-section-title">Договорённости</h2>
-          <div class="doc-fields">
-            ${renderField("Частота, продолжительность", card.agreements.frequencyDuration)}
-            ${renderField("Стоимость", card.agreements.cost)}
-            ${renderField("Правила", card.agreements.rules)}
-            ${renderField("Другие договорённости", card.agreements.other)}
-          </div>
-          <div class="doc-divider"></div>
-        </section>
-
-        <section class="doc-section">
-          <h2 class="doc-section-title">Терапевтический блок</h2>
-          <div class="doc-fields">
-            ${renderField("Жалобы", card.therapyCore.complaints)}
-            ${renderField("Запрос", card.therapyCore.request)}
-            ${renderField("Мишени терапии", card.therapyCore.therapyTargets)}
-            ${renderField("Примечания", card.therapyCore.therapyNotes)}
-          </div>
-
-          <div class="doc-subsection">
-            <h3 class="doc-subtitle">Критерии завершения терапии</h3>
-            <div class="doc-fields">
-              ${renderField("Критерии завершения терапии", card.therapyCore.completionCriteria)}
-              ${renderField("Примечания", card.therapyCore.completionNotes)}
-            </div>
-          </div>
-          <div class="doc-divider"></div>
-        </section>
-
-        <section class="doc-section">
-          <h2 class="doc-section-title">Заметки</h2>
-          <div class="doc-fields">
-            ${renderField("Тип личности", card.notes.personalityType)}
-            ${renderField("Образование, профессия", card.notes.educationProfession)}
-            ${renderField("Состав семьи, в которой живёт", card.notes.familyComposition)}
-            ${renderField("Хронические заболевания", card.notes.chronicDiseases)}
-            ${renderField("Наблюдения у психиатра", card.notes.psychiatristObservations)}
-          </div>
-
-          <div class="doc-subsection">
-            <h3 class="doc-subtitle">Отношения со значимыми людьми</h3>
-            <div class="doc-fields">
-              ${renderField("Отец", card.notes.father)}
-              ${renderField("Мать", card.notes.mother)}
-              ${renderField("Сиблинги", card.notes.siblings)}
-              ${renderField("Дети", card.notes.children)}
-            </div>
-          </div>
-
-          <div class="doc-subsection">
-            <div class="doc-fields">
-              ${renderField("Важные биографические события", card.notes.importantBiography)}
-            </div>
-          </div>
-          <div class="doc-divider"></div>
-        </section>
-
-        <section class="doc-section">
-          <h2 class="doc-section-title">План работы</h2>
-          <div class="doc-fields">
-            ${renderField("Гипотезы", card.plan.hypotheses)}
-          </div>
-
-          <div class="doc-subsection">
-            ${stagesHtml}
-          </div>
-          <div class="doc-divider"></div>
-        </section>
-
-        <section class="doc-section">
-          <h2 class="doc-section-title">Регистрация встреч</h2>
-          ${renderRowsTable(
-            ["Дата", "Тема", "Упражнения"],
-            card.logs.registrationMeetings,
-            ["date", "topic", "exercises"]
-          )}
-          <div class="doc-divider"></div>
-        </section>
-
-        <section class="doc-section">
-          <h2 class="doc-section-title">Примечания по встречам</h2>
-          ${renderRowsTable(
-            ["Дата", "Содержание", "Наблюдения"],
-            card.logs.sessionNotes,
-            ["date", "content", "observation"]
-          )}
-        </section>
-      `;
-
-      state.previewSummary = buildPreviewSummary(card);
-      previewText.textContent = state.previewSummary || "Нет изменений.";
-      previewBadge.textContent = state.previewSummary ? "Изменения подготовлены" : "Нет изменений";
-    }
-
-    function renderStatus() {
-      const clientKey = resolveClientKey();
-      const validClient = isValidClientKey(clientKey);
-      const client = getActiveClient();
-
-      modeStatusPill.textContent = `Режим: ${formatTaskType(state.taskType)}`;
-      docModePill.textContent = state.taskType;
-
-      if (client) {
-        cardStatusPill.textContent = `Карта: ${client.displayName}`;
-      } else if (validClient) {
-        cardStatusPill.textContent = "Карта: будет создана новая";
-      } else {
-        cardStatusPill.textContent = "Карта не загружена";
+      if (!client) {
+        emptyEl.style.display = "flex";
+        workEl.style.display  = "none";
+        return;
       }
 
-      firstLinePreview.value = getFirstLine(noteInput.value);
+      emptyEl.style.display = "none";
+      workEl.style.display  = "flex";
 
-      segmentButtons.forEach(button => {
-        button.classList.toggle("active", button.dataset.mode === state.taskType);
+      document.getElementById("workClientName").textContent  = client.displayName;
+      document.getElementById("workStatusBadge").textContent = client.shortStatus;
+
+      document.querySelectorAll(".segment-btn").forEach(b => {
+        b.classList.toggle("active", b.dataset.mode === state.taskType);
       });
-      taskTypeSelect.value = state.taskType;
     }
 
+    /******************************************************************
+     * РЕНДЕР — КАРТА КЛИЕНТА (страница 2)
+     ******************************************************************/
+    function fld(id, label, val, type = "input", rows = 3) {
+      if (type === "textarea") {
+        return `<div class="form-field">
+          <label class="field-label" for="${id}">${escapeHtml(label)}</label>
+          <textarea id="${id}" class="textarea" style="min-height:${rows * 38}px;" spellcheck="false">${escapeHtml(val || "")}</textarea>
+        </div>`;
+      }
+      return `<div class="form-field">
+        <label class="field-label" for="${id}">${escapeHtml(label)}</label>
+        <input id="${id}" class="input" type="text" value="${escapeHtml(val || "")}" />
+      </div>`;
+    }
+
+    function renderImplRows(stage, rows) {
+      return rows.map((row, i) => `
+        <tr>
+          <td><input class="impl-input" data-stage="${stage}" data-row="${i}" data-col="date" value="${escapeHtml(row.date||"")}" placeholder="ДД.ММ.ГГГГ" /></td>
+          <td><input class="impl-input" data-stage="${stage}" data-row="${i}" data-col="topic" value="${escapeHtml(row.topic||"")}" placeholder="Тема" /></td>
+          <td><input class="impl-input" data-stage="${stage}" data-row="${i}" data-col="motiveExercise" value="${escapeHtml(row.motiveExercise||"")}" placeholder="Мотив / упражнение" /></td>
+          <td><input class="impl-input" data-stage="${stage}" data-row="${i}" data-col="noteObservation" value="${escapeHtml(row.noteObservation||"")}" placeholder="Наблюдение" /></td>
+        </tr>`).join("");
+    }
+
+    function renderImplTable(stage, rows) {
+      return `
+        <div class="impl-table-wrap">
+          <table class="impl-table">
+            <thead><tr>
+              <th style="width:110px">Дата</th>
+              <th>Тема</th>
+              <th>Мотив / Упражнение</th>
+              <th>Примечание / Наблюдение</th>
+            </tr></thead>
+            <tbody id="impl-body-${stage}">${renderImplRows(stage, rows)}</tbody>
+          </table>
+        </div>
+        <button class="btn btn-secondary btn-sm btn-add-row" data-stage="${stage}" type="button">+ Добавить строку</button>`;
+    }
+
+    function renderClientCard() {
+      const client = getActiveClient();
+      if (!client) return;
+      const c = client.card;
+
+      document.getElementById("cardPageTitle").textContent = client.displayName;
+      document.getElementById("cardPageBadge").textContent = client.shortStatus;
+
+      // ── Профиль ──
+      document.getElementById("tab-profile").innerHTML = `
+        <div class="form-section">
+          <div class="form-section-title">ФИО и возраст</div>
+          ${fld("cf-fullName", "ФИО клиента", c.fullName)}
+          <div class="form-field">
+            <span class="field-label">Пол</span>
+            <div class="radio-group">
+              <label><input type="radio" name="card-gender" value="male"   ${c.gender==="male"?"checked":""}  /> Мужчина</label>
+              <label><input type="radio" name="card-gender" value="female" ${c.gender==="female"?"checked":""} /> Женщина</label>
+              <label><input type="radio" name="card-gender" value="child"  ${c.gender==="child"?"checked":""}  /> Ребёнок</label>
+            </div>
+          </div>
+        </div>`;
+
+      // ── Договорённости ──
+      document.getElementById("tab-agreements").innerHTML = `
+        <div class="form-section">
+          <div class="form-section-title">Условия работы</div>
+          ${fld("cf-frequency","Частота, продолжительность", c.frequency)}
+          ${fld("cf-cost","Стоимость", c.cost)}
+          ${fld("cf-rules","Правила", c.rules)}
+          ${fld("cf-otherAgreements","Другие договорённости", c.otherAgreements, "textarea", 3)}
+        </div>`;
+
+      // ── Запрос и заметки ──
+      document.getElementById("tab-requests").innerHTML = `
+        <div class="form-section">
+          <div class="form-section-title">Клинический запрос</div>
+          ${fld("cf-complaints","Жалобы", c.complaints, "textarea", 3)}
+          ${fld("cf-request","Запрос (словами клиента)", c.request, "textarea", 3)}
+          ${fld("cf-therapyTargets","Мишени терапии", c.therapyTargets, "textarea", 5)}
+          ${fld("cf-cardNotes","Примечания", c.cardNotes, "textarea", 3)}
+          ${fld("cf-completionCriteria","Критерии завершения терапии", c.completionCriteria, "textarea", 4)}
+        </div>
+        <div class="form-section">
+          <div class="form-section-title">Заметки о клиенте</div>
+          <div class="form-grid-2">
+            ${fld("cf-personalityType","Тип личности", c.personalityType)}
+            ${fld("cf-education","Образование, профессия", c.education)}
+            ${fld("cf-family","Состав семьи", c.family)}
+            ${fld("cf-chronicDiseases","Хронические заболевания", c.chronicDiseases)}
+            ${fld("cf-psychiatrist","Наблюдения у психиатра", c.psychiatrist)}
+          </div>
+        </div>
+        <div class="form-section">
+          <div class="form-section-title">Отношения со значимыми людьми</div>
+          <div class="form-grid-2">
+            ${fld("cf-father","Отец", c.father)}
+            ${fld("cf-mother","Мать", c.mother)}
+            ${fld("cf-siblings","Сиблинги", c.siblings)}
+            ${fld("cf-children","Дети", c.children)}
+          </div>
+          ${fld("cf-biography","Важные биографические события", c.biography, "textarea", 3)}
+        </div>`;
+
+      // ── План работы ──
+      const stagesHtml = [1,2,3,4,5].map(n => `
+        <div class="form-section">
+          <div class="form-section-title">ПЛАН РАБОТЫ — Этап ${n}</div>
+          ${fld("cf-therapyPlan"+n,"План этапа "+n, c["therapyPlan"+n], "textarea", 4)}
+          <div class="form-section-title" style="margin-top:14px">РЕАЛИЗАЦИЯ — Этап ${n}</div>
+          ${renderImplTable(n, c.stages[n].implementation)}
+        </div>`).join("");
+
+      document.getElementById("tab-plan").innerHTML = `
+        <div class="form-section">
+          <div class="form-section-title">Гипотезы</div>
+          ${fld("cf-hypotheses","Гипотезы терапевта", c.hypotheses, "textarea", 5)}
+        </div>
+        ${stagesHtml}`;
+
+      // Кнопки добавления строк
+      document.querySelectorAll(".btn-add-row").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const stage = parseInt(btn.dataset.stage);
+          collectImplFromDOM(stage, client.card);
+          client.card.stages[stage].implementation.push({ date:"", topic:"", motiveExercise:"", noteObservation:"" });
+          document.getElementById(`impl-body-${stage}`).innerHTML =
+            renderImplRows(stage, client.card.stages[stage].implementation);
+        });
+      });
+    }
+
+    // Собрать таблицу реализации из DOM → в card.stages[stage]
+    function collectImplFromDOM(stage, card) {
+      document.querySelectorAll(`.impl-input[data-stage="${stage}"]`).forEach(inp => {
+        const row = parseInt(inp.dataset.row);
+        const col = inp.dataset.col;
+        if (card.stages[stage].implementation[row]) {
+          card.stages[stage].implementation[row][col] = inp.value;
+        }
+      });
+    }
+
+    // Собрать все данные формы → в client.card
+    function collectCardFromPage2() {
+      const client = getActiveClient();
+      if (!client) return;
+      const c = client.card;
+
+      const g = (id) => document.getElementById(id)?.value ?? "";
+      c.fullName           = g("cf-fullName");
+      c.frequency          = g("cf-frequency");
+      c.cost               = g("cf-cost");
+      c.rules              = g("cf-rules");
+      c.otherAgreements    = g("cf-otherAgreements");
+      c.complaints         = g("cf-complaints");
+      c.request            = g("cf-request");
+      c.therapyTargets     = g("cf-therapyTargets");
+      c.cardNotes          = g("cf-cardNotes");
+      c.completionCriteria = g("cf-completionCriteria");
+      c.personalityType    = g("cf-personalityType");
+      c.education          = g("cf-education");
+      c.family             = g("cf-family");
+      c.chronicDiseases    = g("cf-chronicDiseases");
+      c.psychiatrist       = g("cf-psychiatrist");
+      c.father             = g("cf-father");
+      c.mother             = g("cf-mother");
+      c.siblings           = g("cf-siblings");
+      c.children           = g("cf-children");
+      c.biography          = g("cf-biography");
+      c.hypotheses         = g("cf-hypotheses");
+      for (let n = 1; n <= 5; n++) c["therapyPlan"+n] = g("cf-therapyPlan"+n);
+
+      const genderRadio = document.querySelector('input[name="card-gender"]:checked');
+      if (genderRadio) c.gender = genderRadio.value;
+
+      for (let n = 1; n <= 5; n++) collectImplFromDOM(n, c);
+    }
+
+    /******************************************************************
+     * РЕНДЕР ALL
+     ******************************************************************/
     function renderAll() {
-      const searchTerm = searchClientInput.value.trim().toLowerCase();
-
-      state.filteredClients = state.clients.filter(client => {
-        const haystack = [
-          client.displayName,
-          client.genderAge,
-          client.shortStatus,
-          client.id
-        ].join(" ").toLowerCase();
-        return haystack.includes(searchTerm);
+      const term = (document.getElementById("searchClientInput")?.value || "").trim().toLowerCase();
+      state.filteredClients = state.clients.filter(cl => {
+        const hay = [cl.displayName, cl.shortStatus, cl.id].join(" ").toLowerCase();
+        return hay.includes(term);
       });
-
       renderClientList();
-      renderDocument();
-      renderStatus();
+      renderWorkArea();
     }
 
-    /**********************************************************************
-     * MOCK BACKEND API
-     **********************************************************************/
-    const BASE_URL = "http://127.0.0.1:8000/api";
+    /******************************************************************
+     * BACKEND API
+     ******************************************************************/
+    const BASE_URL = "http://127.0.0.1:8000";
 
     async function apiFetch(path, options = {}) {
       try {
         const res = await fetch(`${BASE_URL}${path}`, {
-          headers: { "Content-Type": "application/json" },
-          ...options,
+          headers: { "Content-Type": "application/json" }, ...options
         });
         if (!res.ok) {
           const err = await res.json().catch(() => ({ detail: res.statusText }));
           throw new Error(err.detail || res.statusText);
         }
         return await res.json();
-      } catch (e) {
+      } catch(e) {
         showToast("Ошибка сервера", e.message);
         return { ok: false, error: e.message };
       }
     }
 
     const backendApi = {
-      async findOrCreateClientCard(payload) {
-        return await apiFetch("/find-or-create-card", {
-          method: "POST",
-          body: JSON.stringify(payload),
-        });
-      },
-
-      async sendTextToLLM(payload) {
-        return await apiFetch("/send-to-llm", {
-          method: "POST",
-          body: JSON.stringify(payload),
-        });
-      },
-
-      async getPreview(payload) {
-        return await apiFetch("/get-preview", {
-          method: "POST",
-          body: JSON.stringify(payload),
-        });
-      },
-
-      async saveChanges(payload) {
-        return await apiFetch("/save-changes", {
-          method: "POST",
-          body: JSON.stringify(payload),
-        });
-      },
-
-      async createBackup(payload) {
-        return await apiFetch("/create-backup", {
-          method: "POST",
-          body: JSON.stringify(payload),
-        });
-      },
-
-      async downloadDocument(payload) {
-        const clientId = encodeURIComponent(payload.activeClientId || "");
-        window.open(`${BASE_URL}/download-document?client_id=${clientId}`, "_blank");
+      async findOrCreateClientCard(p) { return apiFetch("/find-or-create-card",{ method:"POST",body:JSON.stringify(p) }); },
+      async sendTextToLLM(p)          { return apiFetch("/send-to-llm",         { method:"POST",body:JSON.stringify(p) }); },
+      async getPreview(p)             { return apiFetch("/get-preview",          { method:"POST",body:JSON.stringify(p) }); },
+      async saveChanges(p)            { return apiFetch("/save-changes",         { method:"POST",body:JSON.stringify(p) }); },
+      async createBackup(p)           { return apiFetch("/create-backup",        { method:"POST",body:JSON.stringify(p) }); },
+      async downloadDocument(p) {
+        window.open(`${BASE_URL}/download-document?client_id=${encodeURIComponent(p.activeClientId||"")}`, "_blank");
         return { ok: true };
       },
-
-      async simulateAnalysis(payload) {
-        return await apiFetch("/simulate-analysis", {
-          method: "POST",
-          body: JSON.stringify(payload),
-        });
-      },
+      async simulateAnalysis(p) { return apiFetch("/simulate-analysis",{ method:"POST",body:JSON.stringify(p) }); }
     };
 
     function collectPayload() {
+      const client = getActiveClient();
       return {
-        clientKey: resolveClientKey(),
-        taskType: state.taskType,
-        noteText: noteInput.value,
+        clientKey:      client ? client.displayName : "",
+        taskType:       state.taskType,
+        noteText:       document.getElementById("noteInput")?.value || "",
         activeClientId: state.activeClientId,
-        previewCard: buildPreviewCard()
+        card:           client ? client.card : null
       };
     }
 
-    /**********************************************************************
-     * СОБЫТИЯ
-     **********************************************************************/
-    searchClientInput.addEventListener("input", renderAll);
+    /******************************************************************
+     * AI-РАЗБОР ЗАМЕТКИ → ПОЛЯ КАРТЫ
+     ******************************************************************/
+    const AI_FIELDS = [
+      "fullName","gender","frequency","cost","rules","otherAgreements",
+      "complaints","request","therapyTargets","cardNotes","completionCriteria",
+      "personalityType","education","family","chronicDiseases","psychiatrist",
+      "father","mother","siblings","children","biography","hypotheses","therapyPlan1"
+    ];
 
-    noteInput.addEventListener("input", () => {
-      renderAll();
-    });
+    const AI_LABELS = {
+      fullName:"ФИО", gender:"Пол", frequency:"Частота", cost:"Стоимость",
+      rules:"Правила", otherAgreements:"Договорённости", complaints:"Жалобы",
+      request:"Запрос", therapyTargets:"Мишени терапии", cardNotes:"Примечания",
+      completionCriteria:"Критерии завершения", personalityType:"Тип личности",
+      education:"Образование", family:"Состав семьи", chronicDiseases:"Хр. заболевания",
+      psychiatrist:"Психиатр", father:"Отец", mother:"Мать", siblings:"Сиблинги",
+      children:"Дети", biography:"Биография", hypotheses:"Гипотезы", therapyPlan1:"План 1 этап"
+    };
 
-    manualClientInput.addEventListener("input", () => {
-      renderAll();
-    });
+    function applyParsedToCard(card, parsed, forceOverwrite, skipped) {
+      for (const field of AI_FIELDS) {
+        const val = parsed[field];
+        if (!val || String(val).trim() === "") continue;
+        if (!forceOverwrite && card[field] && String(card[field]).trim() !== "") {
+          if (skipped) skipped.push(AI_LABELS[field] || field);
+        } else {
+          card[field] = val;
+        }
+      }
+    }
 
-    taskTypeSelect.addEventListener("change", (event) => {
-      state.taskType = event.target.value;
-      renderAll();
-    });
+    async function parseNoteWithAI() {
+      const API_KEY = localStorage.getItem("anthropic_api_key") || "";
+      if (!API_KEY) {
+        showToast("Нет API ключа", "Укажите ключ Anthropic в Настройках (⚙ внизу панели).");
+        return;
+      }
 
-    segmentButtons.forEach(button => {
-      button.addEventListener("click", () => {
-        state.taskType = button.dataset.mode;
+      const client = getActiveClient();
+      if (!client) { showToast("Клиент не выбран", "Выберите клиента из списка."); return; }
+
+      const noteText = document.getElementById("noteInput")?.value || "";
+      if (!noteText.trim()) { showToast("Пустая заметка", "Сначала введите текст заметки."); return; }
+
+      // Второй клик — принудительная перезапись
+      if (state.pendingParsed) {
+        applyParsedToCard(client.card, state.pendingParsed, true, null);
+        state.pendingParsed = null;
+        client.lastSession = new Date().toLocaleDateString("ru-RU");
+        saveToLocalStorage();
         renderAll();
+        showToast("Готово", "Поля карты заменены принудительно.");
+        updateParseStatus("Перезаписано принудительно", true);
+        return;
+      }
+
+      const parseBtn = document.getElementById("parseNoteBtn");
+      const origText = parseBtn.textContent;
+      parseBtn.disabled = true;
+      parseBtn.textContent = "Разбираем…";
+
+      try {
+        const response = await fetch("https://api.anthropic.com/v1/messages", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": API_KEY,
+            "anthropic-version": "2023-06-01",
+            "anthropic-dangerous-direct-browser-access": "true"
+          },
+          body: JSON.stringify({
+            model: "claude-sonnet-4-20250514",
+            max_tokens: 1000,
+            system: "Ты помощник психолога. Получаешь свободную заметку о клиенте. Возвращаешь ТОЛЬКО валидный JSON без markdown и без пояснений. Если поле не найдено — пустая строка. Не придумывай то чего нет в тексте.",
+            messages: [{
+              role: "user",
+              content: `Разбери заметку по полям карты:\n\n${noteText}\n\nВерни JSON с полями: fullName, gender (male|female|child), frequency, cost, rules, otherAgreements, complaints, request, therapyTargets, cardNotes, completionCriteria, personalityType, education, family, chronicDiseases, psychiatrist, father, mother, siblings, children, biography, hypotheses, therapyPlan1`
+            }]
+          })
+        });
+
+        if (!response.ok) {
+          const err = await response.json().catch(() => ({}));
+          throw new Error(err.error?.message || response.statusText);
+        }
+
+        const data   = await response.json();
+        const parsed = JSON.parse(data.content[0].text);
+
+        const skipped = [];
+        applyParsedToCard(client.card, parsed, false, skipped);
+
+        client.lastSession = new Date().toLocaleDateString("ru-RU");
+        saveToLocalStorage();
+        renderAll();
+
+        if (skipped.length > 0) {
+          state.pendingParsed = parsed;
+          showToast(
+            "Некоторые поля уже заполнены",
+            `Нажмите кнопку ещё раз чтобы заменить:\n${skipped.join(", ")}`
+          );
+          updateParseStatus(`Заполнено. Конфликт: ${skipped.join(", ")}. Повторный клик заменит.`, false);
+        } else {
+          state.pendingParsed = null;
+          showToast("Готово", "Заметка разобрана по полям карты.");
+          updateParseStatus("Разобрано успешно — все поля заполнены.", true);
+        }
+
+      } catch(err) {
+        showToast("Ошибка разбора", err.message);
+        updateParseStatus("Ошибка: " + err.message, false);
+      } finally {
+        parseBtn.disabled = false;
+        parseBtn.textContent = origText;
+      }
+    }
+
+    function updateParseStatus(text, ok) {
+      const el = document.getElementById("parseStatus");
+      const time = new Date().toLocaleTimeString("ru-RU", { hour:"2-digit", minute:"2-digit" });
+      el.style.display = "block";
+      el.innerHTML = `<span class="parse-status-time">${time}</span>
+        <span class="${ok ? "parse-status-ok" : "parse-status-warn"}">${escapeHtml(text)}</span>`;
+    }
+
+    /******************************************************************
+     * СОБЫТИЯ
+     ******************************************************************/
+    document.getElementById("searchClientInput").addEventListener("input", renderAll);
+
+    document.querySelectorAll(".segment-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        state.taskType = btn.dataset.mode;
+        state.pendingParsed = null;
+        renderWorkArea();
       });
     });
 
-    primaryIntakeButton.addEventListener("click", () => {
-      state.taskType = "intake_create_or_update";
-      renderAll();
-      showToast("Режим переключён", "Выбран сценарий первичного приёма.");
+    document.getElementById("voiceBtn").addEventListener("click", () => {
+      showToast("Голос", "В разработке");
     });
 
-    findOrCreateButton.addEventListener("click", async () => {
-      const payload = collectPayload();
+    document.getElementById("parseNoteBtn").addEventListener("click", parseNoteWithAI);
 
-      if (!isValidClientKey(payload.clientKey)) {
-        showToast(
-          "Невозможно продолжить",
-          "Первая строка заметки или поле «Клиент вручную» должны быть в формате «Имя 1234»."
-        );
-        return;
-      }
-
-      await backendApi.findOrCreateClientCard(payload);
-
-      const existing = state.clients.find(client => client.displayName === payload.clientKey);
-
-      if (existing) {
-        state.activeClientId = existing.id;
-        state.cardLoaded = true;
-        renderAll();
-        showToast("Карта найдена", `Загружена карта клиента ${payload.clientKey}.`);
-      } else {
-        const genderAgeRaw = parseNoteFields(noteInput.value)["Пол и возраст"] || "не указано";
-        const newClient = {
-          id: translitToId(payload.clientKey),
-          displayName: payload.clientKey,
-          shortStatus: "Новая карта",
-          genderAge: genderAgeRaw,
-          noteCount: 0,
-          card: buildEmptyCard(payload.clientKey)
-        };
-
-        state.clients.unshift(newClient);
-        state.activeClientId = newClient.id;
-        state.cardLoaded = true;
-        renderAll();
-        showToast("Карта создана", `Подготовлена новая карта клиента ${payload.clientKey}.`);
-      }
+    document.getElementById("buildPlanBtn").addEventListener("click", () => {
+      showToast("Составить план терапии", "В разработке");
     });
 
-    sendToLlmButton.addEventListener("click", async () => {
+    document.getElementById("saveNoteBtn").addEventListener("click", async () => {
+      const client = getActiveClient();
+      if (!client) { showToast("Клиент не выбран", "Выберите клиента из списка."); return; }
       const payload = collectPayload();
-
-      if (!payload.noteText.trim()) {
-        showToast("Пустая заметка", "Сначала вставьте или напишите текст заметки.");
-        return;
-      }
-
-      const result = await backendApi.sendTextToLLM(payload);
-      showToast(
-        "Текст отправлен в LLM",
-        `Демо-обработка выполнена.\nТип задачи: ${formatTaskType(result.task_type)}`
-      );
-    });
-
-    previewButton.addEventListener("click", async () => {
-      const payload = collectPayload();
-      const result = await backendApi.getPreview(payload);
-      previewText.textContent = result.summary || "Нет изменений.";
-      previewBadge.textContent = result.summary ? "Preview готов" : "Нет изменений";
-      showToast("Просмотр обновлён", "Краткий preview изменений пересчитан.");
-    });
-
-    saveButton.addEventListener("click", async () => {
-      const payload = collectPayload();
-
-      if (!isValidClientKey(payload.clientKey)) {
-        showToast(
-          "Сохранение остановлено",
-          "Нельзя сохранять в карту, пока клиент не проходит валидацию формата «Имя 1234»."
-        );
-        return;
-      }
-
       await backendApi.createBackup(payload);
       await backendApi.saveChanges(payload);
-
-      const activeClient = getActiveClient();
-      if (activeClient) {
-        activeClient.card = buildPreviewCard();
-        activeClient.noteCount += 1;
-        activeClient.shortStatus = "Обновлена";
-      }
-
+      client.shortStatus = "Обновлена";
+      saveToLocalStorage();
       renderAll();
-      showToast(
-        "Изменения сохранены",
-        "В демо-режиме обновлены экранные данные. В боевой версии здесь должен быть safe write в .docx после backup."
-      );
+      showToast("Сохранено", "Заметка сохранена.");
     });
 
-    clearButton.addEventListener("click", () => {
-      noteInput.value = "";
-      manualClientInput.value = "";
-      renderAll();
-      showToast("Поле очищено", "Рабочая заметка очищена.");
+    document.getElementById("clearNoteBtn").addEventListener("click", () => {
+      document.getElementById("noteInput").value = "";
+      state.pendingParsed = null;
+      document.getElementById("parseStatus").style.display = "none";
+      showToast("Очищено", "Рабочая заметка очищена.");
     });
 
-    backupButton.addEventListener("click", async () => {
+    document.getElementById("downloadBtn").addEventListener("click", () => {
+      backendApi.downloadDocument(collectPayload());
+    });
+
+    document.getElementById("backupBtn").addEventListener("click", async () => {
       await backendApi.createBackup(collectPayload());
-      showToast("Резервная копия", "Кнопка backup готова к подключению реальной файловой логики.");
+      showToast("Резервная копия", "Готово к подключению файловой логики.");
     });
 
-    downloadButton.addEventListener("click", async () => {
-      await backendApi.downloadDocument(collectPayload());
-      showToast("Скачать документ", "Кнопка готова к подключению выдачи .docx с backend.");
+    document.getElementById("openCardBtn").addEventListener("click", () => {
+      showPage("client-card");
     });
 
-    simulateButton.addEventListener("click", async () => {
-      const result = await backendApi.simulateAnalysis(collectPayload());
-      showToast("Смоделировать разбор", result.text || "Разбор готов.");
+    // Страница 2 — назад
+    document.getElementById("backBtn").addEventListener("click", () => {
+      showPage("main");
     });
 
-    /**********************************************************************
-     * ИНИЦИАЛИЗАЦИЯ
-     **********************************************************************/
+    // Страница 2 — переключение вкладок
+    document.querySelectorAll(".card-tab-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".card-tab-btn").forEach(b => b.classList.remove("active"));
+        document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+        btn.classList.add("active");
+        document.getElementById("tab-" + btn.dataset.tab).classList.add("active");
+      });
+    });
+
+    // Страница 2 — сохранить изменения
+    document.getElementById("cardSaveBtn").addEventListener("click", () => {
+      collectCardFromPage2();
+      const client = getActiveClient();
+      if (client) {
+        client.lastSession = new Date().toLocaleDateString("ru-RU");
+        client.shortStatus = "Обновлена";
+      }
+      saveToLocalStorage();
+      renderClientList();
+      const statusEl = document.getElementById("cardSaveStatus");
+      statusEl.textContent = "Сохранено " + new Date().toLocaleTimeString("ru-RU", { hour:"2-digit", minute:"2-digit" });
+      showToast("Карта сохранена", "Изменения записаны.");
+    });
+
+    // + Новый клиент
+    document.getElementById("newClientBtn").addEventListener("click", () => {
+      const name = prompt("Введите имя клиента (формат: Имя 1234):");
+      if (!name) return;
+      const trimmed = name.trim();
+      if (!isValidClientKey(trimmed)) {
+        showToast("Неверный формат", "Используйте формат «Имя 1234» (имя + 4 цифры).");
+        return;
+      }
+      const existing = state.clients.find(c => c.displayName.toLowerCase() === trimmed.toLowerCase());
+      if (existing) {
+        state.activeClientId = existing.id;
+        saveToLocalStorage();
+        renderAll();
+        showToast("Клиент найден", `Выбран: ${trimmed}`);
+        return;
+      }
+      const newClient = {
+        id:          translitToId(trimmed),
+        displayName: trimmed,
+        shortStatus: "Новая карта",
+        lastSession: "—",
+        card:        buildEmptyCard(trimmed)
+      };
+      state.clients.unshift(newClient);
+      state.activeClientId = newClient.id;
+      saveToLocalStorage();
+      renderAll();
+      showToast("Клиент создан", `Карта для «${trimmed}» готова.`);
+    });
+
+    // Настройки
+    document.getElementById("settingsBtn").addEventListener("click", () => {
+      const modal = document.getElementById("settingsModal");
+      document.getElementById("apiKeyInput").value = localStorage.getItem("anthropic_api_key") || "";
+      modal.classList.add("visible");
+    });
+
+    document.getElementById("saveSettingsBtn").addEventListener("click", () => {
+      const key = document.getElementById("apiKeyInput").value.trim();
+      if (key) localStorage.setItem("anthropic_api_key", key);
+      else localStorage.removeItem("anthropic_api_key");
+      document.getElementById("settingsModal").classList.remove("visible");
+      showToast("Настройки сохранены", key ? "API ключ установлен." : "API ключ удалён.");
+    });
+
+    document.getElementById("closeSettingsBtn").addEventListener("click", () => {
+      document.getElementById("settingsModal").classList.remove("visible");
+    });
+
+    document.getElementById("settingsModal").addEventListener("click", (e) => {
+      if (e.target === e.currentTarget) e.currentTarget.classList.remove("visible");
+    });
+
+    /******************************************************************
+     * ЗАГРУЗКА КЛИЕНТОВ С BACKEND
+     ******************************************************************/
     async function loadClientsFromBackend() {
       try {
         const clients = await apiFetch("/clients");
         if (Array.isArray(clients) && clients.length > 0) {
-          state.clients         = clients;
-          state.filteredClients = clients;
-          state.activeClientId  = clients[0].id;
-          state.cardLoaded      = true;
+          state.clients = clients;
+          state.activeClientId = clients[0].id;
         }
-      } catch (e) {
-        // Сервер недоступен — остаются demoClients из начального состояния
-        console.warn("Backend недоступен, используются демо-данные:", e.message);
-      }
+      } catch(_) {}
     }
 
+    /******************************************************************
+     * BOOTSTRAP
+     ******************************************************************/
     function bootstrap() {
-      loadClientsFromBackend().then(() => {
-        const activeClient = getActiveClient();
-        if (activeClient) {
-          const tc = activeClient.card.therapyCore || {};
-          const n  = activeClient.card.notes       || {};
-          const a  = activeClient.card.agreements  || {};
-          noteInput.value = [
-            activeClient.displayName,
-            tc.complaints       ? `• Жалобы: ${tc.complaints}`                        : "",
-            tc.request          ? `• Запрос (словами клиента): ${tc.request}`          : "",
-            tc.therapyTargets   ? `• Мишени терапии: ${tc.therapyTargets}`             : "",
-            n.importantBiography? `• Дополнения из жизни: ${n.importantBiography}`     : "",
-            a.frequencyDuration ? `• Частота, продолжительность: ${a.frequencyDuration}`: "",
-            a.cost              ? `• Стоимость: ${a.cost}`                              : "",
-            a.rules             ? `• Правила: ${a.rules}`                               : "",
-          ].filter(Boolean).join("\n");
-        }
+      const hasLocal = loadFromLocalStorage();
+      if (!hasLocal) {
+        state.clients = JSON.parse(JSON.stringify(demoClients));
+      }
+      state.filteredClients = state.clients;
+      if (state.clients.length > 0) state.activeClientId = state.clients[0].id;
+
+      loadClientsFromBackend().catch(() => {}).finally(() => {
         renderAll();
       });
     }
